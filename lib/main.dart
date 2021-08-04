@@ -5,6 +5,7 @@ import 'package:super_todo/styles/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'pages/Login.dart';
+import 'pages/home.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,7 +32,8 @@ class MyApp extends StatelessWidget {
       routes: {
         SplashScreen.route:(BuildContext context)=>SplashScreen(),
         OnBoarding.route:(BuildContext context)=>OnBoarding(),
-        Login.route: (BuildContext context) => Login()
+        Login.route: (BuildContext context) => Login(),
+        Home.route: (BuildContext context) => Home(),
       },
     );
   }

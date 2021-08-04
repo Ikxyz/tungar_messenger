@@ -50,7 +50,7 @@ class _OnBoardingState extends State<OnBoarding> {
             skip: skip,
           ),
           Screen3(
-            next: goNext,
+            next: skip,
             skip: skip,
           )
         ],
