@@ -36,7 +36,7 @@ class Login extends StatelessWidget {
                   height: 50,
                 ),
                 Text(
-                  "Welcome to Tungar Massager",
+                  "Welcome to Tungar Messenger",
                   style: textTheme.headline3?.copyWith(
                       color: Colors.red.shade500, fontWeight: FontWeight.bold),
                 ),
