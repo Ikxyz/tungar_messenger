@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.super_todo">
    <application
-        android:label="super_todo"
+        android:label="Tungar Chat"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
