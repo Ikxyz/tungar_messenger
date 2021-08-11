@@ -38,20 +38,28 @@ class Login extends StatelessWidget {
                     height: 50,
                   ),
                   Text(
-                    "Welcome to Tungar Massager",
-                    style: textTheme.headline3?.copyWith(
+                    "Welcome to Tungar Messenger",
+                    style: textTheme.headline4?.copyWith(
                         color: Colors.red.shade500,
                         fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
                   ),
                   SizedBox(
                     height: 20,
                   ),
-                  Text(
-                    "Sign in to Get Started",
-                    style: textTheme.headline4?.copyWith(color: cMute),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Sign in to Get Started",
+                      style: textTheme.headline6?.copyWith(
+                          color: cMute,
+                          fontWeight: FontWeight.normal,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                   SizedBox(
-                    height: 50,
+                    height: 10.0,
                   ),
                   Center(
                     child: OutlinedButton.icon(
@@ -69,7 +77,7 @@ class Login extends StatelessWidget {
                         label: Text("Continue As Guest")),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Center(
                     child: ElevatedButton.icon(

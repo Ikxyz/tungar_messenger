@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1004247462056",
+    "project_id": "austingodwin-tungar-todo",
+    "storage_bucket": "austingodwin-tungar-todo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004247462056:android:030343953c200b9c36129d",
+        "android_client_info": {
+          "package_name": "com.example.super_todo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1004247462056-u9557fqv3m9ltorujba76n54uh9sm4c8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxiufoU0lgKF9SmhdZZ5EzCIihimEKvlo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004247462056-u9557fqv3m9ltorujba76n54uh9sm4c8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

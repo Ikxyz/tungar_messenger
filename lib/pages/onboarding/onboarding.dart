@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:super_todo/pages/onboarding/screen1.dart';
@@ -21,6 +23,7 @@ class _OnBoardingState extends State<OnBoarding> {
   @override
   void initState() {
     super.initState();
+    Timer(Duration(seconds: 5), skip);
     _pageController = PageController(initialPage: 0);
   }
 
