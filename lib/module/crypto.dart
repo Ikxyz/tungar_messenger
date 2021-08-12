@@ -13,7 +13,8 @@ class Crypto {
 
       final digest = _Crypto.md5.convert(bytes);
 
-      return digest.bytes;
+      final hash = digest.toString();
+      return hash;
     }
 
     if (CryptoAlg.sha256 == alg) {}

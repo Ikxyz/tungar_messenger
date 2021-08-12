@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:super_todo/firebase.dart';
 import 'package:super_todo/module/crypto.dart';
+import 'package:super_todo/module/utils.dart';
 import 'package:super_todo/pages/home.dart';
 import 'package:super_todo/styles/colors.dart';
 
@@ -42,11 +43,15 @@ class Login extends StatelessWidget {
     final photoUrl =
         "https://www.gravatar.com/avatar/${Crypto.hash(email, CryptoAlg.md5)}?d=identicon&s=250";
 
-    await user.updateEmail(email);
+    final name = await Utils.generateFullName();
 
-    await user.updatePhotoURL(photoUrl);
-
-    
+    await Future.wait([
+      user.updateEmail(email),
+      user.updatePhotoURL(photoUrl),
+      user.updateDisplayName(name)
+    ]).catchError((err) {
+      print(err);
+    });
 
     // update profile photo
 
