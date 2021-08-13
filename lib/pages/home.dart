@@ -4,6 +4,7 @@ import 'package:super_todo/styles/colors.dart';
 import 'package:cupertino_icons/cupertino_icons.dart';
 import 'package:super_todo/widget/home/compose_chat.dart';
 import 'package:super_todo/widget/home/header.dart';
+import 'package:super_todo/widget/home/nav_item.dart';
 import 'package:super_todo/widget/home/user_item.dart';
 
 class Home extends StatelessWidget {
@@ -63,6 +64,19 @@ class Home extends StatelessWidget {
           ],
         )),
       ),
+      bottomNavigationBar: BottomAppBar(
+        child: Container(
+          height: 70,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              NavItem(navIcon: IconButton(onPressed: () {}, icon: const Icon(Icons.camera_alt),)),
+              NavItem(navIcon: IconButton(onPressed: () {}, icon: const Icon(Icons.chat),)),
+              NavItem(navIcon: IconButton(onPressed: () {}, icon: const Icon(Icons.call),)),
+              NavItem(navIcon: IconButton(onPressed: () {}, icon: const Icon(Icons.person_add,)))
+            ],
+          ),
+          ),),
     );
   }
 }
