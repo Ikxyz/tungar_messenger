@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Tungar Messenger',
       theme: ThemeData(
         primarySwatch: Colors.red,
         textTheme: TextTheme(
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
                 GoogleFonts.lato(color: cLight, fontWeight: FontWeight.bold),
             headline5: GoogleFonts.lato(color: cLight)),
       ),
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       initialRoute: SplashScreen.route,
       routes: {
