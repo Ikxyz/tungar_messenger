@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:super_todo/pages/SplashScreen.dart';
 import 'package:super_todo/pages/chat.dart';
