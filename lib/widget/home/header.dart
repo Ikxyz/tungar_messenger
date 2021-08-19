@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:super_todo/firebase.dart';
+import 'package:super_todo/module/utils.dart';
 import 'package:super_todo/styles/colors.dart';
 
 class HomeHeader extends StatelessWidget {
-  const HomeHeader({Key? key}) : super(key: key);
+   HomeHeader({Key? key}) : super(key: key);
+
+  final user = fAuth.currentUser;
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final textTheme = Theme.of(context).textTheme;
+
+    final username = Utils.usernameShorten(Utils.emailToUsername(user!.email!),10);
+
     return Container(
         width: size.width,
         child: Padding(
@@ -23,19 +30,19 @@ class HomeHeader extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("John Paul",
+                    Text('${user!.displayName}',
                         style: textTheme.headline5!.copyWith(
                             fontWeight: FontWeight.bold, color: cMute)),
-                    Text("@eyesofthegods",
+                    Text(username,
                         style: textTheme.subtitle1!.copyWith(
                             fontWeight: FontWeight.bold, color: cMute)),
-                    Text("Big money man",
+                    Text(user!.isAnonymous? "Guest Account":"Main Account",
                         style: textTheme.subtitle1!.copyWith(
                             fontWeight: FontWeight.bold, color: cMute)),
                   ],
                 ),
               )),
-              CircleAvatar(radius: 30, child: Icon(Icons.person, size: 50)),
+              CircleAvatar(radius: 30,backgroundImage: NetworkImage(user!.photoURL!)),
               SizedBox(
                 width: 20,
               )

@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:super_todo/pages/Login.dart';
+import 'package:super_todo/pages/home.dart';
 import 'package:super_todo/pages/onboarding/onboarding.dart';
 import 'package:super_todo/styles/colors.dart';
+
+import '../firebase.dart';
 
 class SplashScreen extends StatefulWidget {
   static final route = "splash";
@@ -32,10 +35,14 @@ class _SplashScreenState extends State<SplashScreen> {
     /// else isFirstRun == false ~ means the user has finish the onboarding process
     bool isFirstRun = _store.getBool("isFirstRun") ?? true;
 
-    Future.delayed(Duration(seconds: 2), () {
+    final user = fAuth.currentUser;
+
+    Future.delayed(Duration(seconds: 1), () {
       if (isFirstRun) {
         gotoOnBoarding();
-      } else {
+      } else if(user!=null) {
+        gotoHome();
+      }else{
         gotoLogin();
       }
     });
@@ -47,6 +54,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void gotoLogin() {
     Navigator.of(context).pushNamed(Login.route);
+  }
+
+  void gotoHome() {
+    Navigator.of(context).pushNamed(Home.route);
   }
 
   @override
