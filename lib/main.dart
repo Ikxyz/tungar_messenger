@@ -30,7 +30,10 @@ class MyApp extends StatelessWidget {
           headline5: GoogleFonts.lato(color: cLight)
           ),
       ),
-      themeMode: ThemeMode.dark,
+      // themeMode: ThemeMode.dark,
+      // darkTheme: ThemeData(
+      //   brightness: Brightness.dark,
+      // ),
       debugShowCheckedModeBanner: false,
       initialRoute: SplashScreen.route,
       routes: {

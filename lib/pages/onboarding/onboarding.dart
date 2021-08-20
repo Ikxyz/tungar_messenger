@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:super_todo/pages/onboarding/screen1.dart';
 import 'package:super_todo/pages/onboarding/screen2.dart';
 import 'package:super_todo/pages/onboarding/screen3.dart';
@@ -19,12 +20,17 @@ class OnBoarding extends StatefulWidget {
 
 class _OnBoardingState extends State<OnBoarding> {
   late final PageController _pageController;
+  late final SharedPreferences _store;
 
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 5), skip);
+    init();
     _pageController = PageController(initialPage: 0);
+  }
+
+  void init() async{
+    _store = await SharedPreferences.getInstance();
   }
 
   void goNext() {
@@ -32,7 +38,8 @@ class _OnBoardingState extends State<OnBoarding> {
         duration: Duration(milliseconds: 400), curve: Curves.easeIn);
   }
 
-  void skip() {
+  void skip() async{
+    _store.setBool("isFirstRun", false);
     Navigator.of(context)
         .pushNamedAndRemoveUntil(Login.route, (route) => false);
   }

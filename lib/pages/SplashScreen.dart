@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:super_todo/pages/onboarding/onboarding.dart';
 import 'package:super_todo/styles/colors.dart';
+
+import 'Login.dart';
 
 class SplashScreen extends StatefulWidget {
   static final route = "splash";
@@ -11,24 +14,45 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+   _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  late final SharedPreferences _store;
+
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    Timer(Duration(seconds: 5),
-            () => Navigator.of(context).pushNamed(OnBoarding.route)
-    );
+    this._initState();
+  }
+
+  void _initState() async{
+    _store = await SharedPreferences.getInstance();
+    // Timer(Duration(seconds: 5), gotoOnBoarding);
+    /// if isFirstRUn == (true || null) ~ means the user has not finish the onboarding process
+    ///
+    /// else ifFirstRun == false ~ the user has finish the onboarding process
+    bool isFirstRun = _store.getBool("isFirstRun") ?? true;
+
+    Future.delayed(Duration(seconds: 2), () {
+      if (isFirstRun) {
+        gotoOnBoarding();
+      } else {
+        gotoLogin();
+      }
+    });
+  }
+
+  void gotoOnBoarding() {
+    Navigator.of(context).pushNamed(OnBoarding.route);
+  }
+
+  void gotoLogin() {
+    Navigator.of(context).pushNamed(Login.route);
   }
 
   @override
   Widget build(BuildContext context) {
-    // void gotoOnBoarding() {
-    //   Navigator.of(context).pushNamed(OnBoarding.route);
-    // }
-
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
