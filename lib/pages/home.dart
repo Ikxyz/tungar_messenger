@@ -57,7 +57,7 @@ class Home extends StatelessWidget {
                     actions: [
                       ElevatedButton.icon(
                         onPressed: () {
-                          sendMessage("dsgdshdghscdhsd", "Hello World");
+                          sendMessage("--MESSAGE--", "--TO--");
                         },
                         icon: Icon(CupertinoIcons.paperplane, size: 20),
                         label: Text("Send"),
@@ -70,31 +70,56 @@ class Home extends StatelessWidget {
   }
 }
 
-void sendMessage(String text, String to) async {
-  final user = fAuth.currentUser;
 
-  if (user == null) return;
+
+
+
+
+
+void sendMessage(String message, String to) async {
+  final currentUser = fAuth.currentUser;
+
+  if (currentUser == null) return;
 
   String id = idGenerator(len: 12);
   final date = DateTime.now();
 
-  final chat = Chat(
+ 
+ 
+  final sender = Chat(
       id: id,
-      uid: "",
+      uid: currentUser.uid,
       createdAt: date.toString(),
       updatedAt: date.toString(),
       lastModified: date.millisecondsSinceEpoch,
       timestamp: date.millisecondsSinceEpoch);
 
-  final sender = chat;
-  sender.uid = user.uid;
-  final receiver = chat;
-  receiver.uid = to;
+
+  final receiver = Chat(
+      id: id,
+      uid: to,
+      createdAt: date.toString(),
+      updatedAt: date.toString(),
+      lastModified: date.millisecondsSinceEpoch,
+      timestamp: date.millisecondsSinceEpoch);
 
   final batch = fDb.batch();
 
-  batch.set(chatsCollection.doc(sender.id), sender.toMap());
-  batch.set(chatsCollection.doc(receiver.id), receiver.toMap());
+  batch.set(
+      fDb
+          .collection(UserCollections)
+          .doc(sender.uid)
+          .collection(ChatCollections)
+          .doc(sender.id),
+      sender.toMap());
+
+  batch.set(
+      fDb
+          .collection(UserCollections)
+          .doc(receiver.uid)
+          .collection(ChatCollections)
+          .doc(receiver.id),
+      receiver.toMap());
 
   await batch.commit();
 }

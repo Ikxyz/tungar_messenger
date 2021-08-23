@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:super_todo/firebase.dart';
+import 'package:super_todo/models/user.dart';
 import 'package:super_todo/module/crypto.dart';
 import 'package:super_todo/module/utils.dart';
 import 'package:super_todo/pages/home.dart';
@@ -33,22 +34,26 @@ class Login extends StatelessWidget {
 
   Future<UserCredential?> signInAsGuest() async {
     final guestAccount = await fAuth.signInAnonymously();
-    final user = guestAccount.user;
+    final userAuth = guestAccount.user;
 
-    if (user == null) return null;
+    if (userAuth == null) return null;
 
-    // update email
-    final email = '${user.uid}@tungar.com';
+    final email = '${userAuth.uid}@tungar.com';
 
     final photoUrl =
         "https://www.gravatar.com/avatar/${Crypto.hash(email, CryptoAlg.md5)}?d=identicon&s=250";
 
     final name = await Utils.generateFullName();
 
+    final userData =
+        UserModel(email: email, photo: photoUrl, name: name, uid: userAuth.uid);
+
+    await usersCollection.doc(userData.uid).set(userData.toMap());
+
     await Future.wait([
-      user.updateEmail(email),
-      user.updatePhotoURL(photoUrl),
-      user.updateDisplayName(name)
+      userAuth.updateEmail(userData.email),
+      userAuth.updatePhotoURL(userData.photo),
+      userAuth.updateDisplayName(userData.name)
     ]).catchError((err) {
       print(err);
     });
@@ -76,8 +81,6 @@ class Login extends StatelessWidget {
       return null;
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
