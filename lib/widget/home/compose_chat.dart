@@ -11,31 +11,39 @@ class ComposeChat extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Container(
-        padding: EdgeInsets.only(left: size.width / 10, right: size.width / 10),
-        child: Card(
-          shape: StadiumBorder(),
-          child: Container(
-            child: TextFormField(
-              textAlign: TextAlign.center,
+     
+     constraints: BoxConstraints(maxHeight: 200),
+      child: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Column(
+          children: [
+            TextFormField(
+              textAlign: TextAlign.start,
               style: TextStyle(letterSpacing: 1),
+              textCapitalization: TextCapitalization.none,
               decoration: InputDecoration(
-                // contentPadding: const EdgeInsets.all(0),
-                border: InputBorder.none,
-
-                alignLabelWithHint: true,
-
-                // border: OutlineInputBorder(
-                //     borderSide: BorderSide(
-                //         color: Colors.black, width: 5)),
-                hintText: "type here....",
-                hintStyle: textTheme.bodyText2!.copyWith(color: cMute),
-
-                suffixIcon: IconButton(
-                    onPressed: () {},
-                    icon: Icon(CupertinoIcons.paperplane, size: 20)),
-              ),
+                  alignLabelWithHint: true,
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  border: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 5)),
+                  labelText: "To: "),
             ),
-          ),
-        ));
+            TextFormField(
+              textAlign: TextAlign.start,
+              style: TextStyle(letterSpacing: 1),
+              textCapitalization: TextCapitalization.none,
+              minLines: 3,
+              maxLines: 5,
+              decoration: InputDecoration(
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  alignLabelWithHint: true,
+                  border: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 5)),
+                  labelText: "Message: "),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

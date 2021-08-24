@@ -40,9 +40,10 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(Duration(seconds: 1), () {
       if (isFirstRun) {
         gotoOnBoarding();
-      } else if(user!=null) {
+      } else if (user != null) {
+        user.reload();
         gotoHome();
-      }else{
+      } else {
         gotoLogin();
       }
     });
