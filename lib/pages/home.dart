@@ -5,7 +5,7 @@ import 'package:super_todo/models/chat.dart';
 import 'package:super_todo/styles/colors.dart';
 import 'package:cupertino_icons/cupertino_icons.dart';
 import 'package:super_todo/widget/home/compose_chat.dart';
-import 'package:super_todo/widget/home/header.dart';
+import 'package:super_todo/widget/home/header.dart'; 
 import 'package:super_todo/widget/home/nav_item.dart';
 import 'package:super_todo/widget/home/user_item.dart';
 
@@ -52,13 +52,31 @@ class Home extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              NavItem(navIcon: IconButton(onPressed: () {}, icon: const Icon(Icons.camera_alt),)),
-              NavItem(navIcon: IconButton(onPressed: () {}, icon: const Icon(Icons.chat),)),
-              NavItem(navIcon: IconButton(onPressed: () {}, icon: const Icon(Icons.call),)),
-              NavItem(navIcon: IconButton(onPressed: () {}, icon: const Icon(Icons.person_add,)))
+              NavItem(
+                  navIcon: IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.camera_alt),
+              )),
+              NavItem(
+                  navIcon: IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.chat),
+              )),
+              NavItem(
+                  navIcon: IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.call),
+              )),
+              NavItem(
+                  navIcon: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.person_add,
+                      )))
             ],
           ),
-          ),),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
           child: Icon(CupertinoIcons.chat_bubble_text),
           onPressed: () {
@@ -84,12 +102,6 @@ class Home extends StatelessWidget {
   }
 }
 
-
-
-
-
-
-
 void sendMessage(String message, String to) async {
   final currentUser = fAuth.currentUser;
 
@@ -98,8 +110,6 @@ void sendMessage(String message, String to) async {
   String id = idGenerator(len: 12);
   final date = DateTime.now();
 
- 
- 
   final sender = Chat(
       id: id,
       uid: currentUser.uid,
@@ -107,7 +117,6 @@ void sendMessage(String message, String to) async {
       updatedAt: date.toString(),
       lastModified: date.millisecondsSinceEpoch,
       timestamp: date.millisecondsSinceEpoch);
-
 
   final receiver = Chat(
       id: id,
