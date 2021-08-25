@@ -1,30 +1,30 @@
 import 'package:super_todo/models/message.dart';
 
 class Chat {
-  final String id;
-   String uid;
-  final String lastMsg;
-  final List<Message> messages;
+  final String? id;
+  final String? uid;
+  final String? lastMsg;
+  final List<Message>? messages;
 
-  final bool isBlock;
-  final bool isVerified;
+  final bool? isBlock;
+  final bool? isVerified;
 
-  final String createdAt;
-  final String updatedAt;
-  final num lastModified;
-  final num timestamp;
+  final String? createdAt;
+  final String? updatedAt;
+  final num? lastModified;
+  final num? timestamp;
 
   Chat({
-    required this.id,
-    required this.uid,
-    this.lastMsg = "",
-    this.messages = const [],
-    this.isBlock = false,
-    this.isVerified = false,
-    this.createdAt = "",
-    this.updatedAt = "",
-    this.lastModified = 0,
-    this.timestamp = 0,
+    this.id,
+    this.uid,
+    this.lastMsg,
+    this.messages,
+    this.isBlock,
+    this.isVerified,
+    this.createdAt,
+    this.updatedAt,
+    this.lastModified,
+    this.timestamp,
   });
 
   factory Chat.fromJson(Map<String, dynamic> json) {
@@ -47,16 +47,17 @@ class Chat {
   }
 
   copyWith(Chat chat) {
-    //  this.id=chat.id;
-    //  this.uid,
-    // this.lastMsg = "",
-    // this.messages = const [],
-    // this.isBlock = false,
-    // this.isVerified = false,
-    // this.createdAt = "",
-    // this.updatedAt = "",
-    // this.lastModified = 0,
-    // this.timestamp = 0,
+    return Chat(
+        id: chat.id ?? this.id,
+        uid: chat.uid ?? this.uid,
+        lastMsg: chat.lastMsg ?? this.lastMsg,
+        messages: chat.messages ?? this.messages,
+        isBlock: chat.isBlock ?? this.isBlock,
+        isVerified: chat.isVerified ?? this.isVerified,
+        createdAt: chat.createdAt ?? this.createdAt,
+        updatedAt: chat.updatedAt ?? this.updatedAt,
+        lastModified: chat.lastModified ?? this.lastModified,
+        timestamp: chat.timestamp ?? this.timestamp);
   }
 
   Map<String, dynamic> toMap() {
@@ -64,7 +65,7 @@ class Chat {
       "id": this.id,
       "uid": this.uid,
       "lastMsg": this.lastMsg,
-      "messages": messages.map((e) => e.toMap()).toList(),
+      "messages": (messages??[]).map((e) => e.toMap()).toList(),
       "isBlock": this.isBlock,
       "isVerified": this.isVerified,
       "createdAt": this.createdAt,
@@ -79,7 +80,7 @@ class Chat {
      id: ${this.id},
       uid: ${this.uid},
       lastMsg: ${this.lastMsg},
-      messages: ${this.messages.map((e) => e.toString())},
+      messages: ${(this.messages??[]).map((e) => e.toString())},
       isBlock: ${this.isBlock},
       isVerified: ${this.isVerified},
       createdAt: ${this.createdAt},

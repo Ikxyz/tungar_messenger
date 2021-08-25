@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:super_todo/firebase.dart';
 import 'package:super_todo/models/chat.dart';
+import 'package:super_todo/module/utils.dart';
 import 'package:super_todo/styles/colors.dart';
 import 'package:cupertino_icons/cupertino_icons.dart';
 import 'package:super_todo/widget/home/compose_chat.dart';
@@ -48,78 +49,63 @@ class Home extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
           child: Icon(CupertinoIcons.chat_bubble_text),
           onPressed: () {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text("New Message"),
-                    content: ComposeChat(),
-                    actions: [
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          sendMessage("--MESSAGE--", "--TO--");
-                        },
-                        icon: Icon(CupertinoIcons.paperplane, size: 20),
-                        label: Text("Send"),
-                      )
-                    ],
-                  );
-                });
+            onSendButtonClick(context);
           }),
     );
   }
 }
 
+void onSendButtonClick(BuildContext context) {
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("New Message"),
+          content: ComposeChat(toChange: (val){
 
-
-
-
-
+          },messageChange: (val){
+            
+          },),
+          actions: [
+            ElevatedButton.icon(
+              onPressed: () {
+                sendMessage("--MESSAGE--", "--TO--");
+              },
+              icon: Icon(CupertinoIcons.paperplane, size: 20),
+              label: Text("Send"),
+            )
+          ],
+        );
+      });
+}
 
 void sendMessage(String message, String to) async {
   final currentUser = fAuth.currentUser;
 
   if (currentUser == null) return;
 
-  String id = idGenerator(len: 12);
+  String id = idGenerator(len: 16);
   final date = DateTime.now();
 
- 
- 
-  final sender = Chat(
+  final chat = Chat(
       id: id,
-      uid: currentUser.uid,
+      lastMsg: "Hey :)",
       createdAt: date.toString(),
       updatedAt: date.toString(),
       lastModified: date.millisecondsSinceEpoch,
       timestamp: date.millisecondsSinceEpoch);
 
+  final senderChat = chat.copyWith(Chat(id: currentUser.uid));
 
-  final receiver = Chat(
-      id: id,
-      uid: to,
-      createdAt: date.toString(),
-      updatedAt: date.toString(),
-      lastModified: date.millisecondsSinceEpoch,
-      timestamp: date.millisecondsSinceEpoch);
+  final receiverChat = chat.copyWith(Chat(id: to));
 
   final batch = fDb.batch();
 
   batch.set(
-      fDb
-          .collection(UserCollections)
-          .doc(sender.uid)
-          .collection(ChatCollections)
-          .doc(sender.id),
-      sender.toMap());
+      userChatDocument(senderChat.uid, senderChat.id), senderChat.toMap());
 
-  batch.set(
-      fDb
-          .collection(UserCollections)
-          .doc(receiver.uid)
-          .collection(ChatCollections)
-          .doc(receiver.id),
-      receiver.toMap());
+  batch.set(userChatDocument(receiverChat.uid, receiverChat.id),
+      receiverChat.toMap());
 
   await batch.commit();
 }

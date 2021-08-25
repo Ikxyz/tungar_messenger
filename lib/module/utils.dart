@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import "package:http/http.dart" as Http;
 
@@ -32,4 +33,22 @@ class Utils {
       return "Jane Doe";
     }
   }
+}
+
+
+
+String idGenerator({int len = 16}) {
+  String data =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+
+  final random = Random();
+
+  String str = "";
+
+  for (int i = 0; i < len; i++) {
+    final index = random.nextInt(data.length);
+    str += data[index];
+  }
+
+  return str;
 }
