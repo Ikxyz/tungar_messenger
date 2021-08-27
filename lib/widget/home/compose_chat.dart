@@ -42,7 +42,6 @@ class _ComposeChatState extends State<ComposeChat> {
         child: Column(
           children: [
             TextFormField(
-              textAlign: TextAlign.start,
               style: TextStyle(letterSpacing: 1),
               textCapitalization: TextCapitalization.none,
               decoration: InputDecoration(
@@ -58,9 +57,7 @@ class _ComposeChatState extends State<ComposeChat> {
               },
             ),
             TextFormField(
-              textAlign: TextAlign.start,
               style: TextStyle(letterSpacing: 1),
-              textCapitalization: TextCapitalization.none,
               minLines: 3,
               maxLines: 5,
               decoration: InputDecoration(

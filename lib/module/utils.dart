@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:math';
 import "package:http/http.dart" as Http;
 import 'package:super_todo/models/chat.dart';
 import '../firebase.dart';
@@ -38,51 +38,47 @@ class Utils {
   static void sendMessage({required String message, required String to}) async {
     final currentUser = fAuth.currentUser;
 
-    
-
     if (currentUser == null) return;
-
-    
 
     String id = idGenerator(len: 12);
     final date = DateTime.now();
 
-    final sender = Chat(
+    final chat = Chat(
         id: id,
-        uid: currentUser.uid,
-        createdAt: date.toString(),
         lastMsg: message,
+        createdAt: date.toString(),
         updatedAt: date.toString(),
         lastModified: date.millisecondsSinceEpoch,
         timestamp: date.millisecondsSinceEpoch);
 
-    final receiver = Chat(
-        id: id,
-        uid: to,
-        createdAt: date.toString(),
-        updatedAt: date.toString(),
-        lastMsg: message,
-        lastModified: date.millisecondsSinceEpoch,
-        timestamp: date.millisecondsSinceEpoch);
+    final senderChat = chat.copyWith(Chat(id: currentUser.uid));
+
+    final receiverChat = chat.copyWith(Chat(id: to));
 
     final batch = fDb.batch();
 
     batch.set(
-        fDb
-            .collection(UserCollections)
-            .doc(sender.uid)
-            .collection(ChatCollections)
-            .doc(sender.id),
-        sender.toMap());
+        userChatDocument(senderChat.uid, senderChat.id), senderChat.toMap());
 
-    batch.set(
-        fDb
-            .collection(UserCollections)
-            .doc(receiver.uid)
-            .collection(ChatCollections)
-            .doc(receiver.id),
-        receiver.toMap());
+    batch.set(userChatDocument(receiverChat.uid, receiverChat.id),
+        receiverChat.toMap());
 
     await batch.commit();
   }
+}
+
+String idGenerator({int len = 16}) {
+  String data =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+
+  final random = Random();
+
+  String str = "";
+
+  for (int i = 0; i < len; i++) {
+    final index = random.nextInt(data.length);
+    str += data[index];
+  }
+
+  return str;
 }

@@ -13,9 +13,9 @@ final fDb = FirebaseFirestore.instance;
 
 const String UserCollections = "users";
 
-const String ChatCollections = "chats";
+const String ChatCollectionsName = "chats";
 
-const String MessageCollections = "messages";
+const String MessageCollectionsName = "messages";
 
 ///
 /// End Firestore Collection Names
@@ -25,25 +25,24 @@ const String MessageCollections = "messages";
 
 final usersCollection = fDb.collection(UserCollections);
 
-final chatsCollection = fDb.collection(ChatCollections);
+final chatsCollection = fDb.collection(ChatCollectionsName);
 
-final messagesCollection = fDb.collection(MessageCollections);
+final messagesCollection = fDb.collection(MessageCollectionsName);
+
+
+
+
+CollectionReference<Map<String, dynamic>> userChatCollection(String uid) {
+  return usersCollection.doc(uid).collection(ChatCollectionsName);
+}
 
 ///
 /// End Firestore Collections
 
-String idGenerator({int len = 16}) {
-  String data =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+/// Firestore Documents
+///
 
-  final random = Random();
-
-  String str = "";
-
-  for (int i = 0; i < len; i++) {
-    final index = random.nextInt(data.length);
-    str += data[index];
-  }
-
-  return str;
+DocumentReference<Map<String, dynamic>> userChatDocument(
+    String uid, String chatId) {
+  return usersCollection.doc(uid).collection(ChatCollectionsName).doc(chatId);
 }

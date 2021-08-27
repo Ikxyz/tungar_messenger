@@ -69,6 +69,7 @@ class Home extends StatelessWidget {
           child: Icon(CupertinoIcons.chat_bubble_text),
           onPressed: () {
             showDialog(
+              barrierColor: Colors.black12,
                 context: context,
                 builder: (BuildContext context) {
                   return ComposeChat();
