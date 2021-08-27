@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:super_todo/firebase.dart';
@@ -10,7 +9,9 @@ import 'package:super_todo/module/crypto.dart';
 import 'package:super_todo/module/utils.dart';
 import 'package:super_todo/pages/home.dart';
 import 'package:super_todo/styles/colors.dart';
+import 'package:super_todo/widget/loading.dart';
 
+// ignore: must_be_immutable
 class Login extends StatelessWidget {
   static final String route = 'login';
   late BuildContext context;
@@ -34,9 +35,11 @@ class Login extends StatelessWidget {
     Navigator.of(context).pushNamedAndRemoveUntil(Home.route, (route) => false);
   }
 
-
   Future<UserCredential?> signInAsGuest() async {
     final guestAccount = await fAuth.signInAnonymously();
+
+    loadingIndicator(context);
+
     final userAuth = guestAccount.user;
 
     if (userAuth == null) return null;
@@ -69,7 +72,9 @@ class Login extends StatelessWidget {
   /// Sign In With Google Auth
   Future<UserCredential?> signInWithGoogle() async {
     try {
-      final googleSignIn = await GoogleSignIn().signIn();
+      final GoogleSignInAccount? googleSignIn = await GoogleSignIn().signIn();
+
+      loadingIndicator(context);
 
       if (googleSignIn == null) return null;
 
@@ -78,7 +83,7 @@ class Login extends StatelessWidget {
       final googleAuthProviderCredential = GoogleAuthProvider.credential(
           idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
 
-      return fAuth.signInWithCredential(googleAuthProviderCredential);
+      return await fAuth.signInWithCredential(googleAuthProviderCredential);
     } catch (e) {
       print(e);
       return null;
@@ -88,12 +93,10 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-   statusBarColor: Colors.white,
-   statusBarIconBrightness: Brightness.dark,
-
-   systemNavigationBarColor: Colors.white,
-   
-));
+      statusBarColor: Colors.white,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Colors.white,
+    ));
 
     this.context = context;
     textTheme = Theme.of(context).textTheme;
@@ -123,7 +126,7 @@ class Login extends StatelessWidget {
                   "Welcome to Tungar Messenger",
                   style: textTheme.headline3?.copyWith(
                       color: Colors.red.shade500, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
+                  textAlign: TextAlign.center,
                 ),
                 SizedBox(
                   height: 20,

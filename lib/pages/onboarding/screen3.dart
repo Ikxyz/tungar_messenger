@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:super_todo/styles/colors.dart';
 
 class Screen3 extends StatelessWidget {
   final VoidCallback next;

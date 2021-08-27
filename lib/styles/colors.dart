@@ -6,3 +6,5 @@ const Color cAccent = Colors.redAccent;
 
 const Color cLight = Colors.white;
 const Color cMute = Colors.grey;
+const Color cBlack = Colors.black54;
+ 

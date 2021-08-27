@@ -1,18 +1,42 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:super_todo/styles/colors.dart';
+import 'package:super_todo/module/utils.dart';
 
-class ComposeChat extends StatelessWidget {
+class ComposeChat extends StatefulWidget {
   const ComposeChat({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final textTheme = Theme.of(context).textTheme;
+  _ComposeChatState createState() => _ComposeChatState();
+}
 
+class _ComposeChatState extends State<ComposeChat> {
+  String msgTo = "";
+  String actualMessage = "";
+
+  @override
+  Widget build(BuildContext context) {
+    // final size = MediaQuery.of(context).size;
+    // final textTheme = Theme.of(context).textTheme;
+
+    return AlertDialog(
+      title: Text("New Message"),
+      content: composeChatField(),
+      actions: [
+        ElevatedButton.icon(
+          onPressed: () {
+            Utils.sendMessage(message: actualMessage, to: msgTo);
+            Navigator.of(context).pop();
+          },
+          icon: Icon(CupertinoIcons.paperplane, size: 20),
+          label: Text("Send"),
+        )
+      ],
+    );
+  }
+
+  Widget composeChatField() {
     return Container(
-     
-     constraints: BoxConstraints(maxHeight: 200),
+      constraints: BoxConstraints(maxHeight: 200),
       child: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Column(
@@ -27,6 +51,11 @@ class ComposeChat extends StatelessWidget {
                   border: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.black, width: 5)),
                   labelText: "To: "),
+              onChanged: (value) {
+                setState(() {
+                  msgTo = value.toString();
+                });
+              },
             ),
             TextFormField(
               textAlign: TextAlign.start,
@@ -40,6 +69,11 @@ class ComposeChat extends StatelessWidget {
                   border: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.black, width: 5)),
                   labelText: "Message: "),
+              onChanged: (value) {
+                setState(() {
+                  actualMessage = value.toString();
+                });
+              },
             ),
           ],
         ),

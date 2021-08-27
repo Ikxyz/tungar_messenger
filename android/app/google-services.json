@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "919200129134",
-    "project_id": "tungar-todo",
-    "storage_bucket": "tungar-todo.appspot.com"
+    "project_number": "662763241700",
+    "project_id": "tungar-chat",
+    "storage_bucket": "tungar-chat.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:919200129134:android:4fca1b7a91f4ebab32c67f",
+        "mobilesdk_app_id": "1:662763241700:android:71522093db1e94e5e1acf1",
         "android_client_info": {
           "package_name": "com.example.super_todo"
         }
       },
       "oauth_client": [
         {
-          "client_id": "919200129134-cpopal4usuk82i5i7gc7o1j2p9f7in5t.apps.googleusercontent.com",
+          "client_id": "662763241700-v2oii3364v1qg0ls7t1mt2cbj78l8kim.apps.googleusercontent.com",
+          "android_info": {
+            "package_name": "com.example.super_todo",
+            "certificate_hash": "cb37a2d42ebef9f73d2c4f5d77be668fc71690e1"
+          }
+        },
+        {
+          "client_id": "662763241700-8acn54a7dm4b7c7ikmtakjlmgdk73b1o.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBi3bJWs_J6G7XUK6vxbdcI_lD9ooa6bsA"
+          "current_key": "AIzaSyDvu0ju30kAlA0DwE-VqP7YW8GgtS33TYY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "919200129134-cpopal4usuk82i5i7gc7o1j2p9f7in5t.apps.googleusercontent.com",
+              "client_id": "662763241700-8acn54a7dm4b7c7ikmtakjlmgdk73b1o.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "919200129134-ol40ahhp8v5e1k3ervv72irrvv792pbs.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.superTodo"
-              }
             }
           ]
         }
