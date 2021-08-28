@@ -1,32 +1,32 @@
 class Message {
-  final String id;
+  final String? id;
 
-  final String msg;
+  final String? msg;
 
-  final String type;
+  final String? type;
 
-  final String sender;
+  final String? sender;
 
-  final String recipient;
+  final String? recipient;
 
-  final bool isDelivered;
+  final bool? isDelivered;
 
-  final bool isSeen;
+  final bool? isSeen;
 
-  final String sentAt;
+  final String? sentAt;
 
-  final num timestamp;
+  final num? timestamp;
 
   Message({
-    required this.id,
-    required this.msg,
-    required this.sender,
-    required this.recipient,
-    required this.sentAt,
-    required this.timestamp,
-    this.type = "text",
-    this.isDelivered = false,
-    this.isSeen = false,
+    this.id,
+    this.msg,
+    this.sender,
+    this.recipient,
+    this.sentAt,
+    this.timestamp,
+    this.type,
+    this.isDelivered,
+    this.isSeen,
   });
 
   factory Message.fromJson(Map<String, dynamic> json) {
@@ -40,6 +40,19 @@ class Message {
         isDelivered: json["isDelivered"],
         isSeen: json["isSeen"],
         type: json["type"]);
+  }
+
+  copyWith(Message message) {
+    return Message(
+        id: message.id ?? this.id,
+        msg: message.msg ?? this.msg,
+        sender: message.sender ?? this.sender,
+        recipient: message.recipient ?? this.recipient,
+        sentAt: message.sentAt ?? this.sentAt,
+        timestamp: message.timestamp ?? this.timestamp,
+        isDelivered: message.isDelivered ?? this.isDelivered,
+        isSeen: message.isSeen ?? this.isSeen,
+        type: message.type ?? this.type);
   }
 
   Map<String, dynamic> toMap() {
@@ -70,4 +83,3 @@ class Message {
     """;
   }
 }
-

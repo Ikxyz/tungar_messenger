@@ -29,12 +29,11 @@ final chatsCollection = fDb.collection(ChatCollectionsName);
 
 final messagesCollection = fDb.collection(MessageCollectionsName);
 
-
-
-
 CollectionReference<Map<String, dynamic>> userChatCollection(String uid) {
   return usersCollection.doc(uid).collection(ChatCollectionsName);
 }
+
+
 
 ///
 /// End Firestore Collections
@@ -45,4 +44,13 @@ CollectionReference<Map<String, dynamic>> userChatCollection(String uid) {
 DocumentReference<Map<String, dynamic>> userChatDocument(
     String uid, String chatId) {
   return usersCollection.doc(uid).collection(ChatCollectionsName).doc(chatId);
+}
+
+DocumentReference<Map<String, dynamic>> userChatMessageDocument(
+    String uid, String chatId,String messageId) {
+  return usersCollection
+      .doc(uid)
+      .collection(ChatCollectionsName)
+      .doc(chatId)
+      .collection(MessageCollectionsName).doc(messageId);
 }

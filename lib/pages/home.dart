@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:super_todo/firebase.dart';
 import 'package:super_todo/models/chat.dart';
+import 'package:super_todo/models/message.dart';
 import 'package:super_todo/module/utils.dart';
 import 'package:super_todo/styles/colors.dart';
 import 'package:cupertino_icons/cupertino_icons.dart';
@@ -9,17 +10,79 @@ import 'package:super_todo/widget/home/compose_chat.dart';
 import 'package:super_todo/widget/home/header.dart';
 import 'package:super_todo/widget/home/user_item.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   static final route = 'home';
 
   Home({Key? key}) : super(key: key);
 
   @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  String to = "";
+  String message = "";
+
+  /// ----- On To Input Change ------
+  /// This function get called each time the use types into to input box
+  /// and the text in the box gets passed as an argument to out function
+  /// which then save it to the @to variable in our widget using the
+  /// setState() function
+  void onToInputChange(String val) {
+    print("In-APP to: " + val);
+    setState(() {
+      to = val;
+    });
+  }
+
+  /// --- On To Input Change End    -----
+
+  /// ------ On Message Input Change -------
+  ///  each time the user types into the message input this function get called and the message
+  ///   gets passed as an argument to the function
+  ///
+  /// Which we then save to the variable @to using the setState function
+  void onMessageInputChange(String val) {
+    print("In-APP MessageHw: " + val);
+
+    setState(() {
+      message = val;
+    });
+  }
+
+  /// ----- On Message Input Change End
+
+  /// ----- On Floating Action Button Click ------
+  ///  Shows dialog to enter to and message text
+  ///
+  void onSendButtonClick() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("New Message"),
+            content: ComposeChat(
+              toChange: onToInputChange,
+              messageChange: onMessageInputChange,
+            ),
+            actions: [
+              ElevatedButton.icon(
+                onPressed: () {
+                  sendMessage(context, message, to);
+                },
+                icon: Icon(CupertinoIcons.paperplane, size: 20),
+                label: Text("Send"),
+              )
+            ],
+          );
+        });
+  }
+
+  /// ---- End Floating Action Button Click -----
+
+  /// ----- Widget Build Function --------
+  @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    final textTheme = Theme.of(context).textTheme;
-
     return Scaffold(
       body: Container(
         child: SafeArea(
@@ -49,55 +112,43 @@ class Home extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
           child: Icon(CupertinoIcons.chat_bubble_text),
           onPressed: () {
-            onSendButtonClick(context);
+            onSendButtonClick();
           }),
     );
   }
 }
 
-void onSendButtonClick(BuildContext context) {
-  showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("New Message"),
-          content: ComposeChat(toChange: (val){
-
-          },messageChange: (val){
-            
-          },),
-          actions: [
-            ElevatedButton.icon(
-              onPressed: () {
-                sendMessage("--MESSAGE--", "--TO--");
-              },
-              icon: Icon(CupertinoIcons.paperplane, size: 20),
-              label: Text("Send"),
-            )
-          ],
-        );
-      });
-}
-
-void sendMessage(String message, String to) async {
+void sendMessage(BuildContext context, String messageText, String to) async {
   final currentUser = fAuth.currentUser;
 
   if (currentUser == null) return;
 
-  String id = idGenerator(len: 16);
+  String chatId = idGenerator(len: 16);
+  String messageId = idGenerator(len: 16);
   final date = DateTime.now();
 
   final chat = Chat(
-      id: id,
-      lastMsg: "Hey :)",
+      id: chatId,
+      lastMsg: messageText,
       createdAt: date.toString(),
       updatedAt: date.toString(),
       lastModified: date.millisecondsSinceEpoch,
       timestamp: date.millisecondsSinceEpoch);
 
-  final senderChat = chat.copyWith(Chat(id: currentUser.uid));
+  final senderChat = chat.copyWith(Chat(uid: currentUser.uid));
 
-  final receiverChat = chat.copyWith(Chat(id: to));
+  final receiverChat = chat.copyWith(Chat(uid: to));
+
+  final message = Message(
+      id: messageId,
+      msg: messageText,
+      isSeen: false,
+      isDelivered: false,
+      recipient: receiverChat.uid,
+      sender: senderChat.uid,
+      sentAt: date.toString(),
+      timestamp: date.millisecondsSinceEpoch,
+      type: "text");
 
   final batch = fDb.batch();
 
@@ -107,5 +158,14 @@ void sendMessage(String message, String to) async {
   batch.set(userChatDocument(receiverChat.uid, receiverChat.id),
       receiverChat.toMap());
 
+  batch.set(userChatMessageDocument(senderChat.uid, senderChat.id, message.id!),
+      message.toMap());
+
+  batch.set(
+      userChatMessageDocument(receiverChat.uid, receiverChat.id, message.id!),
+      message.toMap());
+
   await batch.commit();
+  print("Message sent");
+  Navigator.of(context).pop();
 }
