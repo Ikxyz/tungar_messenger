@@ -119,53 +119,57 @@ class _HomeState extends State<Home> {
 }
 
 void sendMessage(BuildContext context, String messageText, String to) async {
+
   final currentUser = fAuth.currentUser;
 
   if (currentUser == null) return;
-
-  String chatId = idGenerator(len: 16);
+ 
   String messageId = idGenerator(len: 16);
   final date = DateTime.now();
 
   final chat = Chat(
-      id: chatId,
       lastMsg: messageText,
       createdAt: date.toString(),
       updatedAt: date.toString(),
       lastModified: date.millisecondsSinceEpoch,
       timestamp: date.millisecondsSinceEpoch);
 
-  final senderChat = chat.copyWith(Chat(uid: currentUser.uid));
+  final senderChat = chat.copyWith(Chat(id: to));
 
-  final receiverChat = chat.copyWith(Chat(uid: to));
+  final receiverChat = chat.copyWith(Chat(id: currentUser.uid));
 
   final message = Message(
       id: messageId,
       msg: messageText,
       isSeen: false,
       isDelivered: false,
-      recipient: receiverChat.uid,
-      sender: senderChat.uid,
+      recipient: to,
+      sender: currentUser.uid,
       sentAt: date.toString(),
       timestamp: date.millisecondsSinceEpoch,
       type: "text");
 
   final batch = fDb.batch();
 
-  batch.set(
-      userChatDocument(senderChat.uid, senderChat.id), senderChat.toMap());
+  
 
-  batch.set(userChatDocument(receiverChat.uid, receiverChat.id),
+  batch.set(
+      userChatDocument(currentUser.uid, senderChat.id), senderChat.toMap());
+
+  batch.set(userChatDocument(to, receiverChat.id),
       receiverChat.toMap());
 
-  batch.set(userChatMessageDocument(senderChat.uid, senderChat.id, message.id!),
+  batch.set(userChatMessageDocument(currentUser.uid, to, message.id!),
       message.toMap());
 
   batch.set(
-      userChatMessageDocument(receiverChat.uid, receiverChat.id, message.id!),
+      userChatMessageDocument(to, currentUser.uid, message.id!),
       message.toMap());
 
   await batch.commit();
+
   print("Message sent");
+
+  
   Navigator.of(context).pop();
 }
