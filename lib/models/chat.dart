@@ -3,7 +3,6 @@ import 'package:super_todo/models/message.dart';
 class Chat {
   final String? id;
   final String? lastMsg;
-  final List<Message>? messages;
 
   final bool? isBlock;
   final bool? isVerified;
@@ -16,7 +15,6 @@ class Chat {
   Chat({
     this.id,
     this.lastMsg,
-    this.messages,
     this.isBlock,
     this.isVerified,
     this.createdAt,
@@ -26,14 +24,12 @@ class Chat {
   });
 
   factory Chat.fromJson(Map<String, dynamic> json) {
-    final messages = ((json['messages'] ?? []) as List<Map<String, dynamic>>)
-        .map((msgJson) => Message.fromJson(msgJson))
-        .toList();
+ 
 
     return Chat(
       id: json['id'], 
       lastMsg: json['lastMsg'] ?? "",
-      messages: messages,
+     
       isBlock: json['isBlock'] ?? false,
       isVerified: json['isVerified'] ?? false,
       createdAt: json['createdAt'],
@@ -47,7 +43,6 @@ class Chat {
     return Chat(
         id: chat.id ?? this.id,
         lastMsg: chat.lastMsg ?? this.lastMsg,
-        messages: chat.messages ?? this.messages,
         isBlock: chat.isBlock ?? this.isBlock,
         isVerified: chat.isVerified ?? this.isVerified,
         createdAt: chat.createdAt ?? this.createdAt,
@@ -60,7 +55,6 @@ class Chat {
     return {
       "id": this.id,   
       "lastMsg": this.lastMsg,
-      "messages": (messages??[]).map((e) => e.toMap()).toList(),
       "isBlock": this.isBlock,
       "isVerified": this.isVerified,
       "createdAt": this.createdAt,
@@ -74,7 +68,6 @@ class Chat {
     return """
      id: ${this.id},
       lastMsg: ${this.lastMsg},
-      messages: ${(this.messages??[]).map((e) => e.toString())},
       isBlock: ${this.isBlock},
       isVerified: ${this.isVerified},
       createdAt: ${this.createdAt},

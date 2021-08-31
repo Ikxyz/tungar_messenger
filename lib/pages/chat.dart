@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:super_todo/styles/colors.dart';
 import 'package:super_todo/widget/chat/bubble.dart';
 
-class Chat extends StatelessWidget {
+class ChatPage extends StatelessWidget {
   static final String route = "chat";
-  const Chat({Key? key}) : super(key: key);
+  const ChatPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

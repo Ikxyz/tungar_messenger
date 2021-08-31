@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:super_todo/firebase.dart';
+import 'package:super_todo/components/ChatList.dart';
+import '../firebase.dart';
 import 'package:super_todo/models/chat.dart';
 import 'package:super_todo/models/message.dart';
 import 'package:super_todo/module/utils.dart';
@@ -103,7 +104,7 @@ class _HomeState extends State<Home> {
                 child: SingleChildScrollView(
               physics: BouncingScrollPhysics(),
               child: Column(
-                children: List.filled(3, HomeUserItem()),
+                children: [ChatList()],
               ),
             )),
           ],
