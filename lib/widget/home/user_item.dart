@@ -1,36 +1,68 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:super_todo/models/chat.dart';
+import 'package:super_todo/module/utils.dart';
 import 'package:super_todo/pages/chat.dart';
 
+import '../../firebase.dart';
+
 class HomeUserItem extends StatelessWidget {
-  const HomeUserItem({Key? key}) : super(key: key);
+  final Chat chat;
+  const HomeUserItem({Key? key, required this.chat}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
-      child: ListTile(
-        onTap: () {
-          Navigator.of(context).pushNamed(Chat.route);
-        },
-        leading: CircleAvatar(
-          child: Icon(CupertinoIcons.person),
-        ),
-        title: Row(
-          children: [
-            Expanded(child: Text("Tovia David")),
-            Text(
-              "23 mins ago",
-              style: textTheme.caption,
-            )
-          ],
-        ),
-        subtitle: Text("i don't know yet have tried reaching out to him..."),
-        trailing: IconButton(
-            onPressed: () {}, icon: Icon(CupertinoIcons.bubble_right)),
-      ),
-    );
+    return FutureBuilder(
+        future: usersCollection.doc(chat.id).get(),
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text("Error occurred loading chat info");
+          }
+
+          if (snapshot.hasData) {
+            final userDoc = snapshot.data!.data() as dynamic;
+
+            final String name = userDoc['name'];
+
+            final date =
+                DateTime.fromMillisecondsSinceEpoch(chat.lastModified!.toInt());
+
+            final dateString = date.timeAgoPlusTen(20);
+
+            // final initials = name.split(' ').map((word) => word[0]).join('');
+
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 15),
+              child: ListTile(
+                onTap: () {
+                  Navigator.of(context)
+                      .pushNamed(ChatPage.route, arguments: [chat, userDoc]);
+                },
+                leading: CircleAvatar(
+                  // child: Text(initials),
+                  backgroundImage: NetworkImage(userDoc['photo']),
+                ),
+                title: Row(
+                  children: [
+                    Expanded(child: Text(userDoc['name'] ?? '')),
+                    Text(
+                      dateString,
+                      style: textTheme.caption,
+                    )
+                  ],
+                ),
+                subtitle: Text(chat.lastMsg ?? ''),
+                trailing: IconButton(
+                    onPressed: () {}, icon: Icon(CupertinoIcons.bubble_right)),
+              ),
+            );
+          }
+
+          return CircularProgressIndicator();
+        });
   }
 }

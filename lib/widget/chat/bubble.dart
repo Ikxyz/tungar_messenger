@@ -16,6 +16,17 @@ class Bubble extends StatelessWidget {
     final alignment = this.type == BubbleType.receiver
         ? Alignment.centerLeft
         : Alignment.centerRight;
+    final border = this.type == BubbleType.receiver
+        ? BorderRadius.only(
+            topLeft: Radius.circular(40),
+            topRight: Radius.circular(40),
+            bottomLeft: Radius.circular(0),
+            bottomRight: Radius.circular(40))
+        : BorderRadius.only(
+            topLeft: Radius.circular(40),
+            topRight: Radius.circular(40),
+            bottomLeft: Radius.circular(40),
+            bottomRight: Radius.circular(0));
 
     return Align(
       alignment: alignment,
@@ -23,11 +34,7 @@ class Bubble extends StatelessWidget {
         margin: EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: bgColor,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(40),
-              topRight: Radius.circular(40),
-              bottomLeft: Radius.circular(40),
-              bottomRight: Radius.circular(0)),
+          borderRadius: border,
         ),
         padding: EdgeInsets.all(15),
         child: Text(

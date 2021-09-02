@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         OnBoarding.route: (BuildContext context) => OnBoarding(),
         Login.route: (BuildContext context) => Login(),
         Home.route: (BuildContext context) => Home(),
-        Chat.route: (BuildContext context) => Chat(),
+        ChatPage.route: (BuildContext context) => ChatPage(),
       },
     );
   }
