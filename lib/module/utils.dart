@@ -2,19 +2,19 @@ import 'dart:convert';
 import 'dart:math';
 
 import "package:http/http.dart" as Http;
+import 'package:timeago/timeago.dart' as _timeAgo;
 
 class Utils {
-
   /// Email to Username
   ///
-  static String emailToUsername(String email){
+  static String emailToUsername(String email) {
     final str = email.split("@")[0];
     return "@$str";
   }
 
-  static String usernameShorten(String username,[int length = 8]){
+  static String usernameShorten(String username, [int length = 8]) {
     final max = username.length;
-    final str = username.substring(0,length>=max?max:length);
+    final str = username.substring(0, length >= max ? max : length);
     return "$str...";
   }
 
@@ -35,8 +35,6 @@ class Utils {
   }
 }
 
-
-
 String idGenerator({int len = 16}) {
   String data =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
@@ -51,4 +49,19 @@ String idGenerator({int len = 16}) {
   }
 
   return str;
+}
+
+
+
+/// Calculate Time Ago
+String timeAgo(DateTime date) {
+  return _timeAgo.format(date);
+}
+
+extension MyDate on DateTime {
+  String get timeAgo => _timeAgo.format(this);
+
+  String timeAgoPlusTen(int hours) {
+    return _timeAgo.format(this.add(Duration(hours: hours)));
+  }
 }

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:super_todo/models/chat.dart';
+import 'package:super_todo/module/utils.dart';
 import 'package:super_todo/pages/chat.dart';
 
 import '../../firebase.dart';
@@ -18,35 +19,38 @@ class HomeUserItem extends StatelessWidget {
         future: usersCollection.doc(chat.id).get(),
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-
-
-
-
-
           if (snapshot.hasError) {
             return Text("Error occurred loading chat info");
           }
 
-
-
-
           if (snapshot.hasData) {
             final userDoc = snapshot.data!.data() as dynamic;
+
+            final String name = userDoc['name'];
+
+            final date =
+                DateTime.fromMillisecondsSinceEpoch(chat.lastModified!.toInt());
+
+            final dateString = date.timeAgoPlusTen(20);
+
+            // final initials = name.split(' ').map((word) => word[0]).join('');
 
             return Padding(
               padding: const EdgeInsets.only(bottom: 15),
               child: ListTile(
                 onTap: () {
-                  Navigator.of(context).pushNamed(ChatPage.route);
+                  Navigator.of(context)
+                      .pushNamed(ChatPage.route, arguments: [chat, userDoc]);
                 },
                 leading: CircleAvatar(
+                  // child: Text(initials),
                   backgroundImage: NetworkImage(userDoc['photo']),
                 ),
                 title: Row(
                   children: [
                     Expanded(child: Text(userDoc['name'] ?? '')),
                     Text(
-                      chat.updatedAt ?? '',
+                      dateString,
                       style: textTheme.caption,
                     )
                   ],
@@ -57,14 +61,6 @@ class HomeUserItem extends StatelessWidget {
               ),
             );
           }
-
-
-
-
-
-
-
-
 
           return CircularProgressIndicator();
         });
