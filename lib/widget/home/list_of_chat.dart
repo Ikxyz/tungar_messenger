@@ -7,9 +7,9 @@ import 'package:super_todo/pages/chat.dart';
 
 import '../../firebase.dart';
 
-class HomeUserItem extends StatelessWidget {
+class ListOfChat extends StatelessWidget {
   final Chat chat;
-  const HomeUserItem({Key? key, required this.chat}) : super(key: key);
+  const ListOfChat({Key? key, required this.chat}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

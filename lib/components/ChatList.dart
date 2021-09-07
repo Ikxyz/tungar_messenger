@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:super_todo/firebase.dart';
 import 'package:super_todo/models/chat.dart';
-import 'package:super_todo/widget/home/user_item.dart';
+import 'package:super_todo/widget/home/list_of_chat.dart';
 
 class ChatList extends StatelessWidget {
   const ChatList({Key? key}) : super(key: key);
@@ -31,7 +31,7 @@ class ChatList extends StatelessWidget {
                 ...data!.docs
                     .map((doc) => doc.data())
                     .map((json) => Chat.fromJson(Map.from(json)))
-                    .map((chat) => HomeUserItem(chat: chat))
+                    .map((chat) => ListOfChat(chat: chat))
                     .toList()
               ],
             );

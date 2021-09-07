@@ -9,7 +9,9 @@ import 'package:super_todo/styles/colors.dart';
 import 'package:cupertino_icons/cupertino_icons.dart';
 import 'package:super_todo/widget/home/compose_chat.dart';
 import 'package:super_todo/widget/home/header.dart';
-import 'package:super_todo/widget/home/user_item.dart';
+import 'package:super_todo/widget/home/list_of_chat.dart';
+
+import 'chat.dart';
 
 class Home extends StatefulWidget {
   static final route = 'home';
@@ -119,58 +121,3 @@ class _HomeState extends State<Home> {
   }
 }
 
-void sendMessage(BuildContext context, String messageText, String to) async {
-
-  final currentUser = fAuth.currentUser;
-
-  if (currentUser == null) return;
- 
-  String messageId = idGenerator(len: 16);
-  final date = DateTime.now();
-
-  final chat = Chat(
-      lastMsg: messageText,
-      createdAt: date.toString(),
-      updatedAt: date.toString(),
-      lastModified: date.millisecondsSinceEpoch,
-      timestamp: date.millisecondsSinceEpoch);
-
-  final senderChat = chat.copyWith(Chat(id: to));
-
-  final receiverChat = chat.copyWith(Chat(id: currentUser.uid));
-
-  final message = Message(
-      id: messageId,
-      msg: messageText,
-      isSeen: false,
-      isDelivered: false,
-      recipient: to,
-      sender: currentUser.uid,
-      sentAt: date.toString(),
-      timestamp: date.millisecondsSinceEpoch,
-      type: "text");
-
-  final batch = fDb.batch();
-
-  
-
-  batch.set(
-      userChatDocument(currentUser.uid, senderChat.id), senderChat.toMap());
-
-  batch.set(userChatDocument(to, receiverChat.id),
-      receiverChat.toMap());
-
-  batch.set(userChatMessageDocument(currentUser.uid, to, message.id!),
-      message.toMap());
-
-  batch.set(
-      userChatMessageDocument(to, currentUser.uid, message.id!),
-      message.toMap());
-
-  await batch.commit();
-
-  print("Message sent");
-
-  
-  Navigator.of(context).pop();
-}

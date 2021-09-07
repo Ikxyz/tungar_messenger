@@ -35,6 +35,15 @@ CollectionReference<Map<String, dynamic>> userChatCollection(String uid) {
   return usersCollection.doc(uid).collection(ChatCollectionsName);
 }
 
+CollectionReference<Map<String, dynamic>> userChatMessageCollection(
+    String uid, String chatId) {
+  return usersCollection
+      .doc(uid)
+      .collection(ChatCollectionsName)
+      .doc(chatId)
+      .collection(MessageCollectionsName);
+}
+
 ///
 /// End Firestore Collections
 

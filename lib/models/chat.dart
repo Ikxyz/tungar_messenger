@@ -39,6 +39,19 @@ class Chat {
     );
   }
 
+  // copyWith(Chat chat) {
+  //   return Chat(
+  //       id: chat.id ?? this.id,
+  //       lastMsg: chat.lastMsg ?? this.lastMsg,
+  //       isBlock: chat.isBlock ?? this.isBlock,
+  //       isVerified: chat.isVerified ?? this.isVerified,
+  //       createdAt: chat.createdAt ?? this.createdAt,
+  //       updatedAt: chat.updatedAt ?? this.updatedAt,
+  //       lastModified: chat.lastModified ?? this.lastModified,
+  //       timestamp: chat.timestamp ?? this.timestamp);
+  // }
+
+
   copyWith(Chat chat) {
     return Chat(
         id: chat.id ?? this.id,

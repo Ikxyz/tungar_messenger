@@ -39,7 +39,8 @@ class Bubble extends StatelessWidget {
         padding: EdgeInsets.all(15),
         child: Text(
           this.msg,
-          style: TextStyle(color: cLight),
+
+          style: TextStyle(color: cLight, fontSize: msg.length < 3 ? 60 : 14),
         ),
       ),
     );
