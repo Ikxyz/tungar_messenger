@@ -13,7 +13,7 @@ class HomeHeader extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final textTheme = Theme.of(context).textTheme;
 
-    final username = Utils.usernameShorten(Utils.emailToUsername(user!.email!),10);
+    final username = Utils.emailToUsername(user!.email!);
 
     return Container(
         width: size.width,
