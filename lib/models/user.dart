@@ -5,25 +5,30 @@ class UserModel {
   final String name;
   final String photo;
   final String email;
-
+  final String username;
   UserModel({
     required this.uid,
     required this.name,
     required this.photo,
     required this.email,
+    required this.username,
   });
+
+ 
 
   UserModel copyWith({
     String? uid,
     String? name,
     String? photo,
     String? email,
+    String? username,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
       name: name ?? this.name,
       photo: photo ?? this.photo,
       email: email ?? this.email,
+      username: username ?? this.username,
     );
   }
 
@@ -33,6 +38,7 @@ class UserModel {
       'name': name,
       'photo': photo,
       'email': email,
+      'username': username,
     };
   }
 
@@ -42,6 +48,7 @@ class UserModel {
       name: map['name'],
       photo: map['photo'],
       email: map['email'],
+      username: map['username'],
     );
   }
 
@@ -52,22 +59,27 @@ class UserModel {
 
   @override
   String toString() {
-    return 'user(uid: $uid, name: $name, photo: $photo, email: $email)';
+    return 'UserModel(uid: $uid, name: $name, photo: $photo, email: $email, username: $username)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-
+  
     return other is UserModel &&
-        other.uid == uid &&
+      other.uid == uid &&
         other.name == name &&
         other.photo == photo &&
-        other.email == email;
+      other.email == email &&
+        other.username == username;
   }
 
   @override
   int get hashCode {
-    return uid.hashCode ^ name.hashCode ^ photo.hashCode ^ email.hashCode;
+    return uid.hashCode ^
+        name.hashCode ^
+        photo.hashCode ^
+        email.hashCode ^
+        username.hashCode;
   }
 }

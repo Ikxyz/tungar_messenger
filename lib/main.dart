@@ -9,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'pages/Login.dart';
 import 'pages/home.dart';
+import 'pages/profile.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,7 +43,10 @@ class MyApp extends StatelessWidget {
         Login.route: (BuildContext context) => Login(),
         Home.route: (BuildContext context) => Home(),
         ChatPage.route: (BuildContext context) => ChatPage(),
+        Profile.route: (BuildContext context) => Profile(),
       },
     );
   }
 }
+
+                           

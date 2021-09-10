@@ -12,6 +12,7 @@ import 'package:super_todo/widget/home/header.dart';
 import 'package:super_todo/widget/home/list_of_chat.dart';
 
 import 'chat.dart';
+import 'profile.dart';
 
 class Home extends StatefulWidget {
   static final route = 'home';
@@ -96,7 +97,11 @@ class _HomeState extends State<Home> {
             ),
 
             /// Header Widget
-            HomeHeader(),
+            InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed(Profile.route);
+                },
+                child: HomeHeader()),
 
             SizedBox(
               height: 50,
