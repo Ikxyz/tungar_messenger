@@ -17,8 +17,8 @@ class ChatList extends StatelessWidget {
       return Text("You need to be logged in to access this feature");
     }
 
-    return FutureBuilder(
-        future: userChatCollection(user.uid).get(),
+    return StreamBuilder(
+        stream: userChatCollection(user.uid).snapshots(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasError) {
             return Text("Error occurred fetching chat information");
