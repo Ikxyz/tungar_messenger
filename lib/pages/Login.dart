@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:super_todo/components/EditNameAndUsername.dart';
 import 'package:super_todo/firebase.dart';
 import 'package:super_todo/models/user.dart';
 import 'package:super_todo/module/crypto.dart';
@@ -9,15 +10,33 @@ import 'package:super_todo/module/utils.dart';
 import 'package:super_todo/pages/home.dart';
 import 'package:super_todo/styles/colors.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   static final String route = 'login';
-  late BuildContext context;
-  late TextTheme textTheme;
 
   Login({Key? key}) : super(key: key);
 
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  late BuildContext context;
+
+  late TextTheme textTheme;
+
   void loginAsGuest() async {
-    final user = await signInAsGuest();
+    final nameAndUsername = await showDialog<List<String>>(
+            context: context,
+            barrierDismissible: false,
+            useSafeArea: true,
+            builder: (BuildContext context) {
+              return EditNameAndUsername();
+            }) ??
+        [];
+
+    if (nameAndUsername.length < 2) return;
+
+    final user = await signInAsGuest(nameAndUsername[0], nameAndUsername[1]);
 
     if (user == null) return;
 
@@ -25,28 +44,32 @@ class Login extends StatelessWidget {
   }
 
   void loginWithGoogle() async {
-    final user = (await signInWithGoogle()) ?? (await signInAsGuest());
+    final user = await signInWithGoogle();
 
     if (user == null) return;
 
     Navigator.of(context).pushNamedAndRemoveUntil(Home.route, (route) => false);
   }
 
-  Future<UserCredential?> signInAsGuest() async {
+
+
+  Future<UserCredential?> signInAsGuest(String name, String username) async {
     final guestAccount = await fAuth.signInAnonymously();
     final userAuth = guestAccount.user;
 
     if (userAuth == null) return null;
 
-    final email = '${userAuth.uid}@tungar.com';
+    final email = '$username@tungar.com';
 
     final photoUrl =
         "https://www.gravatar.com/avatar/${Crypto.hash(email, CryptoAlg.md5)}?d=identicon&s=250";
 
-    final name = await Utils.generateFullName();
-
-    final userData =
-        UserModel(email: email, photo: photoUrl, name: name, uid: userAuth.uid);
+    final userData = UserModel(
+        email: email,
+        username: username,
+        photo: photoUrl,
+        name: name,
+        uid: userAuth.uid);
 
     await usersCollection.doc(userData.uid).set(userData.toMap());
 

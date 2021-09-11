@@ -15,8 +15,8 @@ class ListOfChat extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    return FutureBuilder(
-        future: usersCollection.doc(chat.id).get(),
+    return StreamBuilder(
+        stream: usersCollection.doc(chat.id).snapshots(),
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasError) {
@@ -25,6 +25,8 @@ class ListOfChat extends StatelessWidget {
 
           if (snapshot.hasData) {
             final userDoc = snapshot.data!.data() as dynamic;
+
+            // if (userDoc == null) return Offstage();
 
             final String name = userDoc['name'];
 

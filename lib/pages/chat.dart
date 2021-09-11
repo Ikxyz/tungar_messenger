@@ -26,7 +26,7 @@ class _ChatPageState extends State<ChatPage> {
 
   void onSend() {
     if (messageString.trim().length == 0) return;
-    sendMessage(context, messageString, chattingWithUser!['uid']);
+    sendMessage(context, messageString, chattingWithUser!['username']);
   }
 
   @override
@@ -84,10 +84,19 @@ class _ChatPageState extends State<ChatPage> {
   }
 }
 
-void sendMessage(BuildContext context, String messageText, String to) async {
+void sendMessage(
+    BuildContext context, String messageText, String toUsername) async {
   final currentUser = fAuth.currentUser;
 
   if (currentUser == null) return;
+
+  final toUsernameDoc = await usersCollection
+      .where('username', isEqualTo: toUsername.toLowerCase().trim())
+      .get();
+
+  if (toUsernameDoc.docs.length == 0) return;
+
+  final String to = toUsernameDoc.docs[0].data()['uid'];
 
   String messageId = idGenerator(len: 16);
   final date = DateTime.now();
