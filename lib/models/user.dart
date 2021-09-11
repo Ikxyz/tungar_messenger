@@ -6,15 +6,15 @@ class UserModel {
   final String photo;
   final String email;
   final String username;
+  final num timestamp;
   UserModel({
     required this.uid,
     required this.name,
     required this.photo,
     required this.email,
     required this.username,
+    required this.timestamp,
   });
-
- 
 
   UserModel copyWith({
     String? uid,
@@ -22,6 +22,7 @@ class UserModel {
     String? photo,
     String? email,
     String? username,
+    num? timestamp,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
@@ -29,6 +30,7 @@ class UserModel {
       photo: photo ?? this.photo,
       email: email ?? this.email,
       username: username ?? this.username,
+      timestamp: timestamp ?? this.timestamp,
     );
   }
 
@@ -39,6 +41,7 @@ class UserModel {
       'photo': photo,
       'email': email,
       'username': username,
+      'timestamp': timestamp,
     };
   }
 
@@ -49,6 +52,7 @@ class UserModel {
       photo: map['photo'],
       email: map['email'],
       username: map['username'],
+      timestamp: map['timestamp'] ?? 0,
     );
   }
 
@@ -59,7 +63,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, name: $name, photo: $photo, email: $email, username: $username)';
+    return 'UserModel(uid: $uid, name: $name, photo: $photo, email: $email, username: $username, timestamp: $timestamp)';
   }
 
   @override
@@ -68,18 +72,20 @@ class UserModel {
   
     return other is UserModel &&
       other.uid == uid &&
-        other.name == name &&
+      other.name == name &&
         other.photo == photo &&
       other.email == email &&
-        other.username == username;
+      other.username == username &&
+        other.timestamp == timestamp;
   }
 
   @override
   int get hashCode {
     return uid.hashCode ^
-        name.hashCode ^
+      name.hashCode ^
         photo.hashCode ^
         email.hashCode ^
-        username.hashCode;
+      username.hashCode ^
+        timestamp.hashCode;
   }
 }

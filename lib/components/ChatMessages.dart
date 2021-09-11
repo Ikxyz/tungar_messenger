@@ -8,8 +8,9 @@ import '../firebase.dart';
 
 class ChatMessages extends StatelessWidget {
   final Chat chatInfo;
+  final ScrollController _scrollController = ScrollController();
 
-  const ChatMessages({Key? key, required this.chatInfo}) : super(key: key);
+  ChatMessages({Key? key, required this.chatInfo}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +19,12 @@ class ChatMessages extends StatelessWidget {
     return Container(
       child: SingleChildScrollView(
         /// Stream Builder
+        controller: _scrollController,
+        physics: BouncingScrollPhysics(),
         child: StreamBuilder(
             stream: userChatMessageCollection(currentUser!.uid, chatInfo.id!)
-                .orderBy('timestamp')
-                .limit(30)
+                .orderBy('timestamp', descending: true)
+                .limit(20)
                 .snapshots(),
             builder: (BuildContext context,
                 AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -30,10 +33,18 @@ class ChatMessages extends StatelessWidget {
               }
 
               if (snapshot.hasData && snapshot.data != null) {
+                _scrollController.animateTo(
+                    _scrollController.position.maxScrollExtent,
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeIn);
+
+
                 return ShowMessages(
                   currentUserUid: currentUser.uid,
                   messages: snapshot.data!.docs
                       .map((doc) => Message.fromJson(doc.data()))
+                      .toList()
+                      .reversed
                       .toList(),
                 );
               }
