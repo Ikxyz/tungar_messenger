@@ -73,8 +73,13 @@ class _HomeState extends State<Home> {
             ),
             actions: [
               ElevatedButton.icon(
-                onPressed: () {
-                  sendMessage(context, message, to);
+                onPressed: () async {
+                  try {
+                    await sendMessage(context, message, to);
+                    Navigator.of(context).pop();
+                  } catch (e) {
+                    print('error occurred sending message');
+                  }
                 },
                 icon: Icon(CupertinoIcons.paperplane, size: 20),
                 label: Text("Send"),
@@ -109,7 +114,6 @@ class _HomeState extends State<Home> {
               height: 50,
             ),
 
-
             /// LIST OF USERS
             ListOfUsers(
               onUserClick: (String username) {
@@ -139,4 +143,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
