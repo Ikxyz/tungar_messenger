@@ -37,7 +37,7 @@ CollectionReference<Map<String, dynamic>> userChatCollection(String uid) {
 
 CollectionReference<Map<String, dynamic>> userChatMessageCollection(
     String uid, String chatId) {
-  return usersCollection
+  return fDb.collection(UserCollections)
       .doc(uid)
       .collection(ChatCollectionsName)
       .doc(chatId)

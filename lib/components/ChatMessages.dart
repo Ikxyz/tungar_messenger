@@ -16,27 +16,37 @@ class ChatMessages extends StatefulWidget {
 }
 
 class _ChatMessagesState extends State<ChatMessages> {
-
   final currentUser = fAuth.currentUser;
 
-  Map<String,dynamic>? lastIndex;
+  Map<String, dynamic>? lastIndex;
 
   List<Message> listOfMessages = [];
-  
-  final ScrollController _scrollController = ScrollController();
 
- 
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
 
+    /// Collection Ref -> Query
+    ///
+    final collectionRef = fDb
+        .collection(UserCollections)
+        .doc(currentUser!.uid)
+        .collection(ChatCollectionsName)
+        .doc(widget.chatInfo.id!)
+        .collection(MessageCollectionsName);
+
     // Get List Of Messages
-    userChatMessageCollection(currentUser!.uid, widget.chatInfo.id!)
+    collectionRef
         .orderBy('timestamp', descending: true)
         .limit(20)
-        .snapshots().listen((snapshot) {
+        .snapshots()
+        .listen((snapshot) {
       if (snapshot.docs.length == 0) return;
+
+      lastIndex = snapshot.docs.first.data();
+      print(lastIndex);
       setState(() {
         listOfMessages = snapshot.docs
             .map((doc) => Message.fromJson(doc.data()))
@@ -47,13 +57,32 @@ class _ChatMessagesState extends State<ChatMessages> {
     });
 
     /// List for scroll events
-    _scrollController.addListener(() {
+    _scrollController.addListener(() async {
+      print(
+          "APP_INFO: ${_scrollController.position.pixels} ------- ${_scrollController.position.minScrollExtent}");
+
       if (_scrollController.position.pixels ==
           _scrollController.position.minScrollExtent) {
-        userChatMessageCollection(currentUser!.uid, widget.chatInfo.id!)
+        final moreMessages = await collectionRef
             .orderBy('timestamp', descending: true)
             .startAfter([lastIndex])
-            .limit(20);
+            .limit(20)
+            .get();
+
+        print(moreMessages.size);
+
+        lastIndex = moreMessages.docs.last.data();
+
+        setState(() {
+          listOfMessages = [
+            ...moreMessages.docs
+                .map((doc) => Message.fromJson(doc.data()))
+                .toList()
+                .reversed
+                .toList(),
+            ...listOfMessages
+          ];
+        });
       }
     });
   }
@@ -62,7 +91,6 @@ class _ChatMessagesState extends State<ChatMessages> {
   Widget build(BuildContext context) {
     return Container(
       child: SingleChildScrollView(
-        /// Stream Builder
         controller: _scrollController,
         physics: BouncingScrollPhysics(),
         child: Column(
