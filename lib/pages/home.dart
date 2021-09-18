@@ -73,8 +73,13 @@ class _HomeState extends State<Home> {
             ),
             actions: [
               ElevatedButton.icon(
-                onPressed: () {
-                  sendMessage(context, message, to);
+                onPressed: () async {
+                  try {
+                    await sendMessage(context, message, to);
+                    Navigator.of(context).pop();
+                  } catch (e) {
+                    print('error occurred sending message');
+                  }
                 },
                 icon: Icon(CupertinoIcons.paperplane, size: 20),
                 label: Text("Send"),
@@ -90,6 +95,23 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        
+      ),
+      drawer: Drawer(
+        child:  SafeArea(
+          child: Column(
+            children: [
+              InkWell(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(Profile.route);
+                      },
+                      child: HomeHeader()),
+            ],
+          ),
+        ),
+
+      ),
       body: Container(
         child: SafeArea(
             child: Column(
@@ -99,16 +121,10 @@ class _HomeState extends State<Home> {
             ),
 
             /// Header Widget
-            InkWell(
-                onTap: () {
-                  Navigator.of(context).pushNamed(Profile.route);
-                },
-                child: HomeHeader()),
-
+           
             SizedBox(
               height: 50,
             ),
-
 
             /// LIST OF USERS
             ListOfUsers(
@@ -139,4 +155,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-

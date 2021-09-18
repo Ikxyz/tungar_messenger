@@ -152,6 +152,4 @@ Future<void> sendMessage(
   await batch.commit();
 
   print("Message sent");
-
-  // Navigator.of(context).pop();
 }
