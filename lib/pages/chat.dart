@@ -22,11 +22,23 @@ class _ChatPageState extends State<ChatPage> {
   Chat? chatInfo;
   Map<String, dynamic>? chattingWithUser;
 
+  final textController = TextEditingController();
+
   String messageString = '';
 
-  void onSend() {
+  void onSend() async {
     if (messageString.trim().length == 0) return;
-    sendMessage(context, messageString, chattingWithUser!['username']);
+    await sendMessage(context, messageString, chattingWithUser!['username']);
+    setState(() {
+      messageString = "";
+      textController.clear();
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    textController.dispose();
   }
 
   @override
@@ -62,6 +74,7 @@ class _ChatPageState extends State<ChatPage> {
               children: [
                 Expanded(
                   child: TextFormField(
+                    controller: textController,
                     onChanged: (val) {
                       messageString = val;
                     },
@@ -84,7 +97,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 }
 
-void sendMessage(
+Future<void> sendMessage(
     BuildContext context, String messageText, String toUsername) async {
   final currentUser = fAuth.currentUser;
 

@@ -69,7 +69,9 @@ class _LoginState extends State<Login> {
         username: username,
         photo: photoUrl,
         name: name,
-        uid: userAuth.uid);
+        uid: userAuth.uid,
+        timestamp: DateTime.now().millisecondsSinceEpoch
+        );
 
     await usersCollection.doc(userData.uid).set(userData.toMap());
 

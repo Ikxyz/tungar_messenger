@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:super_todo/components/ChatList.dart';
+import 'package:super_todo/components/ListOfUsers.dart';
 import '../firebase.dart';
 import 'package:super_todo/models/chat.dart';
 import 'package:super_todo/models/message.dart';
@@ -59,13 +60,14 @@ class _HomeState extends State<Home> {
   /// ----- On Floating Action Button Click ------
   ///  Shows dialog to enter to and message text
   ///
-  void onSendButtonClick() {
+  void onSendButtonClick(String? username) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text("New Message"),
             content: ComposeChat(
+              to: username ?? "",
               toChange: onToInputChange,
               messageChange: onMessageInputChange,
             ),
@@ -107,6 +109,18 @@ class _HomeState extends State<Home> {
               height: 50,
             ),
 
+
+            /// LIST OF USERS
+            ListOfUsers(
+              onUserClick: (String username) {
+                onSendButtonClick(username);
+              },
+            ),
+
+            SizedBox(
+              height: 30,
+            ),
+
             Expanded(
                 child: SingleChildScrollView(
               physics: BouncingScrollPhysics(),
@@ -120,7 +134,7 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
           child: Icon(CupertinoIcons.chat_bubble_text),
           onPressed: () {
-            onSendButtonClick();
+            onSendButtonClick(null);
           }),
     );
   }

@@ -10,22 +10,39 @@ final inputDecoration = InputDecoration(
 
 // typedef InputChange = void Function(String val);
 
-class ComposeChat extends StatelessWidget {
+class ComposeChat extends StatefulWidget {
+  final String to;
   final Function(String val) toChange;
   final Function(String val) messageChange;
 
-  const ComposeChat(
-      {Key? key, required this.toChange, required this.messageChange})
+  ComposeChat(
+      {Key? key,
+      this.to = "",
+      required this.toChange,
+      required this.messageChange})
       : super(key: key);
+
+  @override
+  _ComposeChatState createState() => _ComposeChatState();
+}
+
+class _ComposeChatState extends State<ComposeChat> {
+  late final TextEditingController toController;
 
   void onToInputChange(String val) {
     print(val);
-    this.toChange(val);
+    this.widget.toChange(val);
   }
 
   void onMessageInputChange(String val) {
     print(val);
-    this.messageChange(val);
+    this.widget.messageChange(val);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    toController = TextEditingController(text: widget.to);
   }
 
   @override
@@ -40,6 +57,7 @@ class ComposeChat extends StatelessWidget {
         child: Column(
           children: [
             TextFormField(
+              controller: toController,
               onChanged: (val) {
                 onToInputChange(val);
               },
