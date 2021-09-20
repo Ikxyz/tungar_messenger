@@ -5,16 +5,15 @@ enum MediaType{
   video
 }
 class Story{
-final String url;
-final MediaType media;
-final Duration duration;
-final User user;
+final String storyUrl;
+final User userName;
+final String avatarUrl;
+
+ 
 
 const Story({
-  required this.url,
-  required this.media,
-  required this.duration,
-  required this.user
-  
+  required this.storyUrl,
+  required this.userName,
+  required this.avatarUrl,
 });
 }
