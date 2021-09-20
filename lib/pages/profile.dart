@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:super_todo/widget/home/header.dart';
-import '../firebase.dart';
+import 'package:provider/provider.dart';
+import 'package:super_todo/module/currentUser.dart';
 import 'Login.dart';
 
 class Profile extends StatelessWidget {
@@ -10,7 +10,8 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = fAuth.currentUser;
+    final currentUser = context.watch<CurrentUser>();
+    final user = currentUser.user;
 
     return Scaffold(
         body: SafeArea(
@@ -22,17 +23,17 @@ class Profile extends StatelessWidget {
             ),
             CircleAvatar(
               radius: 70,
-              backgroundImage: NetworkImage(user!.photoURL!),
+              backgroundImage: NetworkImage(user.photo),
             ),
             SizedBox(
               height: 20,
             ),
-            Text(user.displayName!,
+            Text(user.name,
                 style: Theme.of(context)
                     .textTheme
                     .headline5!
                     .copyWith(color: Colors.black)),
-            Text('@username',
+            Text('@${user.username}',
                 style: Theme.of(context)
                     .textTheme
                     .bodyText2!
@@ -52,9 +53,10 @@ class Profile extends StatelessWidget {
             /// Logout Button
             ElevatedButton(
               child: Text('Logout'),
-              onPressed: () async {
-                await fAuth.signOut();
-                Navigator.of(context).pushNamed(Login.route);
+              onPressed: () {
+                currentUser.logout();
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil(Login.route, (route) => false);
               },
             )
           ],

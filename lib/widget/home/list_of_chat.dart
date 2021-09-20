@@ -28,7 +28,7 @@ class ListOfChat extends StatelessWidget {
 
             if (userDoc == null) return Offstage();
 
-            final String name = userDoc['name'];
+            // final String name = userDoc['name'];
 
             final date =
                 DateTime.fromMillisecondsSinceEpoch(chat.lastModified!.toInt());
