@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import "dart:math";
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 const isDebug = true;
 
@@ -9,6 +9,10 @@ final fAuth = FirebaseAuth.instance;
 
 // Firestore database
 final fDb = FirebaseFirestore.instance;
+
+// / Firebase Storage
+
+final fStorage = firebase_storage.FirebaseStorage.instance;
 
 /// Firestore Collection Names
 ///
@@ -37,7 +41,8 @@ CollectionReference<Map<String, dynamic>> userChatCollection(String uid) {
 
 CollectionReference<Map<String, dynamic>> userChatMessageCollection(
     String uid, String chatId) {
-  return fDb.collection(UserCollections)
+  return fDb
+      .collection(UserCollections)
       .doc(uid)
       .collection(ChatCollectionsName)
       .doc(chatId)

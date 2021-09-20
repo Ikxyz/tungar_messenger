@@ -1,8 +1,8 @@
-import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:super_todo/firebase.dart';
 import 'package:super_todo/models/chat.dart';
+import 'package:super_todo/module/currentUser.dart';
 import 'package:super_todo/widget/home/list_of_chat.dart';
 
 class ChatList extends StatelessWidget {
@@ -10,7 +10,7 @@ class ChatList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = fAuth.currentUser;
+    final user = context.watch<CurrentUser>().user;
 
     if (user == null) {
       return Text("You need to be logged in to access this feature");

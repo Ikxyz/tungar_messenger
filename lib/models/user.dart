@@ -7,6 +7,7 @@ class UserModel {
   final String email;
   final String username;
   final num timestamp;
+  final String password;
   UserModel({
     required this.uid,
     required this.name,
@@ -14,6 +15,7 @@ class UserModel {
     required this.email,
     required this.username,
     required this.timestamp,
+    required this.password,
   });
 
   UserModel copyWith({
@@ -23,6 +25,7 @@ class UserModel {
     String? email,
     String? username,
     num? timestamp,
+    String? password,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
@@ -31,6 +34,7 @@ class UserModel {
       email: email ?? this.email,
       username: username ?? this.username,
       timestamp: timestamp ?? this.timestamp,
+      password: password ?? this.password,
     );
   }
 
@@ -42,6 +46,7 @@ class UserModel {
       'email': email,
       'username': username,
       'timestamp': timestamp,
+      'password': password,
     };
   }
 
@@ -53,6 +58,7 @@ class UserModel {
       email: map['email'],
       username: map['username'],
       timestamp: map['timestamp'] ?? 0,
+      password: map['password'] ?? "",
     );
   }
 
@@ -69,23 +75,25 @@ class UserModel {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is UserModel &&
-      other.uid == uid &&
-      other.name == name &&
+        other.uid == uid &&
+        other.name == name &&
         other.photo == photo &&
-      other.email == email &&
-      other.username == username &&
-        other.timestamp == timestamp;
+        other.email == email &&
+        other.username == username &&
+        other.timestamp == timestamp &&
+        other.password == password;
   }
 
   @override
   int get hashCode {
     return uid.hashCode ^
-      name.hashCode ^
+        name.hashCode ^
         photo.hashCode ^
         email.hashCode ^
-      username.hashCode ^
+        username.hashCode ^
+        password.hashCode ^
         timestamp.hashCode;
   }
 }

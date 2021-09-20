@@ -6,9 +6,10 @@ import 'package:super_todo/components/EditNameAndUsername.dart';
 import 'package:super_todo/firebase.dart';
 import 'package:super_todo/models/user.dart';
 import 'package:super_todo/module/crypto.dart';
-import 'package:super_todo/module/utils.dart';
 import 'package:super_todo/pages/home.dart';
 import 'package:super_todo/styles/colors.dart';
+import 'package:super_todo/widget/loginPage.dart';
+import 'package:super_todo/widget/signupPage.dart';
 
 class Login extends StatefulWidget {
   static final String route = 'login';
@@ -24,88 +25,90 @@ class _LoginState extends State<Login> {
 
   late TextTheme textTheme;
 
-  void loginAsGuest() async {
-    final nameAndUsername = await showDialog<List<String>>(
-            context: context,
-            barrierDismissible: false,
-            useSafeArea: true,
-            builder: (BuildContext context) {
-              return EditNameAndUsername();
-            }) ??
-        [];
-
-    if (nameAndUsername.length < 2) return;
-
-    final user = await signInAsGuest(nameAndUsername[0], nameAndUsername[1]);
-
-    if (user == null) return;
-
-    Navigator.of(context).pushNamedAndRemoveUntil(Home.route, (route) => false);
+  onAppStarting() {
+    
   }
 
-  void loginWithGoogle() async {
-    final user = await signInWithGoogle();
+  // void loginAsGuest() async {
+  //   final nameAndUsername = await showDialog<List<String>>(
+  //           context: context,
+  //           barrierDismissible: false,
+  //           useSafeArea: true,
+  //           builder: (BuildContext context) {
+  //             return EditNameAndUsername();
+  //           }) ??
+  //       [];
 
-    if (user == null) return;
+  //   if (nameAndUsername.length < 2) return;
 
-    Navigator.of(context).pushNamedAndRemoveUntil(Home.route, (route) => false);
-  }
+  //   final user = await signInAsGuest(nameAndUsername[0], nameAndUsername[1]);
 
+  //   if (user == null) return;
 
+  //   Navigator.of(context).pushNamedAndRemoveUntil(Home.route, (route) => false);
+  // }
 
-  Future<UserCredential?> signInAsGuest(String name, String username) async {
-    final guestAccount = await fAuth.signInAnonymously();
-    final userAuth = guestAccount.user;
+  // void loginWithGoogle() async {
+  //   final user = await signInWithGoogle();
 
-    if (userAuth == null) return null;
+  //   if (user == null) return;
 
-    final email = '$username@tungar.com';
+  //   Navigator.of(context).pushNamedAndRemoveUntil(Home.route, (route) => false);
+  // }
 
-    final photoUrl =
-        "https://www.gravatar.com/avatar/${Crypto.hash(email, CryptoAlg.md5)}?d=identicon&s=250";
+  // Future<UserCredential?> signInAsGuest(String name, String username) async {
+  //   final guestAccount = await fAuth.signInAnonymously();
+  //   final userAuth = guestAccount.user;
 
-    final userData = UserModel(
-        email: email,
-        username: username,
-        photo: photoUrl,
-        name: name,
-        uid: userAuth.uid,
-        timestamp: DateTime.now().millisecondsSinceEpoch
-        );
+  //   if (userAuth == null) return null;
 
-    await usersCollection.doc(userData.uid).set(userData.toMap());
+  //   final email = '$username@tungar.com';
 
-    await Future.wait([
-      userAuth.updateEmail(userData.email),
-      userAuth.updatePhotoURL(userData.photo),
-      userAuth.updateDisplayName(userData.name)
-    ]).catchError((err) {
-      print(err);
-    });
+  //   final photoUrl =
+  //       "https://www.gravatar.com/avatar/${Crypto.hash(email, CryptoAlg.md5)}?d=identicon&s=250";
 
-    // update profile photo
+  //   final userData = UserModel(
+  //       email: email,
+  //       username: username,
+  //       photo: photoUrl,
+  //       name: name,
+  //       uid: userAuth.uid,
+  //       password: "",
+  //       timestamp: DateTime.now().millisecondsSinceEpoch);
 
-    return guestAccount;
-  }
+  //   await usersCollection.doc(userData.uid).set(userData.toMap());
 
-  /// Sign In With Google Auth
-  Future<UserCredential?> signInWithGoogle() async {
-    try {
-      final googleSignIn = await GoogleSignIn().signIn();
+  //   await Future.wait([
+  //     userAuth.updateEmail(userData.email),
+  //     userAuth.updatePhotoURL(userData.photo),
+  //     userAuth.updateDisplayName(userData.name)
+  //   ]).catchError((err) {
+  //     print(err);
+  //   });
 
-      if (googleSignIn == null) return null;
+  //   // update profile photo
 
-      final googleAuth = await googleSignIn.authentication;
+  //   return guestAccount;
+  // }
 
-      final googleAuthProviderCredential = GoogleAuthProvider.credential(
-          idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
+  // /// Sign In With Google Auth
+  // Future<UserCredential?> signInWithGoogle() async {
+  //   try {
+  //     final googleSignIn = await GoogleSignIn().signIn();
 
-      return fAuth.signInWithCredential(googleAuthProviderCredential);
-    } catch (e) {
-      print(e);
-      return null;
-    }
-  }
+  //     if (googleSignIn == null) return null;
+
+  //     final googleAuth = await googleSignIn.authentication;
+
+  //     final googleAuthProviderCredential = GoogleAuthProvider.credential(
+  //         idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
+
+  //     return fAuth.signInWithCredential(googleAuthProviderCredential);
+  //   } catch (e) {
+  //     print(e);
+  //     return null;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -114,6 +117,7 @@ class _LoginState extends State<Login> {
 
     return Scaffold(
       body: Container(
+          height: MediaQuery.of(context).size.height,
           color: Colors.white,
           padding: const EdgeInsets.all(15),
           child: SingleChildScrollView(
@@ -122,63 +126,74 @@ class _LoginState extends State<Login> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  "assets/bg1.png",
-                  height: 250,
+                Padding(
+                  padding: const EdgeInsets.only(top: 80),
+                  child: Image.asset(
+                    "assets/bg1.png",
+                    height: 250,
+                  ),
                 ),
                 SizedBox(
                   height: 50,
                 ),
                 Text(
                   "Welcome to Tungar Messenger",
+                  textAlign: TextAlign.center,
                   style: textTheme.headline3?.copyWith(
-                      color: Colors.red.shade500, fontWeight: FontWeight.bold),
+                    color: Colors.red.shade500,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 80,
                 ),
-                Text(
-                  "Sign in to Get Started",
-                  style: textTheme.headline4?.copyWith(color: cMute),
+                Center(
+                  child: Text(
+                    "Get Started",
+                    style: textTheme.headline4?.copyWith(color: cMute),
+                  ),
                 ),
                 SizedBox(
                   height: 50,
                 ),
                 Center(
-                  child: OutlinedButton.icon(
-                      onPressed: loginAsGuest,
+                  child: ElevatedButton(
+                      // onPressed: loginWithGoogle,
+                      onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CreateAccout())),
                       style: ButtonStyle(
                           shape: MaterialStateProperty.all(StadiumBorder()),
                           elevation: MaterialStateProperty.all(0),
                           padding: MaterialStateProperty.all(
-                              const EdgeInsets.only(
-                                  top: 10, bottom: 10, left: 30, right: 30))),
-                      icon: Icon(
-                        Icons.person,
-                        size: 25,
-                      ),
-                      label: Text("Continue As Guest")),
+                              const EdgeInsets.symmetric(
+                                  vertical: 20, horizontal: 30))),
+                      child: Text(
+                        "Create Account",
+                        style: TextStyle(fontSize: 22),
+                      )),
                 ),
                 SizedBox(
                   height: 20,
                 ),
                 Center(
-                  child: ElevatedButton.icon(
-                      onPressed: loginWithGoogle,
+                  child: OutlinedButton(
+                      // onPressed: loginAsGuest,
+                      onPressed: () => showModalBottomSheet(
+                          isScrollControlled: true,
+                          context: context,
+                          builder: (context) => LoginPage()),
                       style: ButtonStyle(
                           shape: MaterialStateProperty.all(StadiumBorder()),
                           elevation: MaterialStateProperty.all(0),
                           padding: MaterialStateProperty.all(
-                              const EdgeInsets.only(
-                                  top: 10, bottom: 10, left: 30, right: 30))),
-                      icon: Image.asset(
-                        'assets/google.png',
-                        width: 25,
-                        height: 25,
-                        color: Colors.white,
-                        fit: BoxFit.cover,
-                      ),
-                      label: Text("Sign In With Google")),
+                              const EdgeInsets.symmetric(
+                                  vertical: 20, horizontal: 60))),
+                      child: Text(
+                        "Login",
+                        style: TextStyle(fontSize: 22),
+                      )),
                 ),
               ],
             ),

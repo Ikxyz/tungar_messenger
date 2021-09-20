@@ -1,5 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:super_todo/module/localDb.dart';
 import 'package:super_todo/pages/SplashScreen.dart';
 import 'package:super_todo/pages/chat.dart';
 import 'package:super_todo/pages/onboarding/onboarding.dart';
@@ -7,14 +10,25 @@ import 'package:super_todo/styles/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import 'module/currentUser.dart';
 import 'pages/Login.dart';
 import 'pages/home.dart';
 import 'pages/profile.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+   await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp
+  ]);
+  
   await Firebase.initializeApp();
-  runApp(MyApp());
+
+  await LocalDb.init();
+
+
+  runApp(ChangeNotifierProvider(
+    create: (context) => CurrentUser(),
+    child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -36,6 +50,7 @@ class MyApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
+      // initialRoute: LocalDb.getUser(context) == null ? SplashScreen.route : Home.route,
       initialRoute: SplashScreen.route,
       routes: {
         SplashScreen.route: (BuildContext context) => SplashScreen(),

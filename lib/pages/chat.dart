@@ -5,7 +5,6 @@ import 'package:super_todo/models/chat.dart';
 import 'package:super_todo/models/message.dart';
 import 'package:super_todo/module/utils.dart';
 import 'package:super_todo/styles/colors.dart';
-import 'package:super_todo/widget/chat/bubble.dart';
 
 import '../firebase.dart';
 

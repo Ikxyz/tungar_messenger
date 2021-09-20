@@ -35,7 +35,7 @@ class ListOfUsers extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
-                  reverse: true,
+                  // reverse: true,
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,

@@ -2,15 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:super_todo/components/ChatList.dart';
 import 'package:super_todo/components/ListOfUsers.dart';
-import '../firebase.dart';
-import 'package:super_todo/models/chat.dart';
-import 'package:super_todo/models/message.dart';
-import 'package:super_todo/module/utils.dart';
-import 'package:super_todo/styles/colors.dart';
-import 'package:cupertino_icons/cupertino_icons.dart';
 import 'package:super_todo/widget/home/compose_chat.dart';
 import 'package:super_todo/widget/home/header.dart';
-import 'package:super_todo/widget/home/list_of_chat.dart';
 
 import 'chat.dart';
 import 'profile.dart';
