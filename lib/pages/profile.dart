@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:super_todo/module/utils.dart';
 import 'package:super_todo/widget/home/header.dart';
 import '../firebase.dart';
 import 'Login.dart';
@@ -12,6 +13,8 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = fAuth.currentUser;
 
+    final username = Utils.emailToUsername(user!.email!);
+
     return Scaffold(
         body: SafeArea(
       child: SingleChildScrollView(
@@ -22,7 +25,7 @@ class Profile extends StatelessWidget {
             ),
             CircleAvatar(
               radius: 70,
-              backgroundImage: NetworkImage(user!.photoURL!),
+              backgroundImage: NetworkImage(user.photoURL!),
             ),
             SizedBox(
               height: 20,
@@ -32,7 +35,7 @@ class Profile extends StatelessWidget {
                     .textTheme
                     .headline5!
                     .copyWith(color: Colors.black)),
-            Text('@username',
+            Text('$username',
                 style: Theme.of(context)
                     .textTheme
                     .bodyText2!

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:super_todo/pages/SplashScreen.dart';
 import 'package:super_todo/pages/chat.dart';
+import 'package:super_todo/pages/chatProfile.dart';
 import 'package:super_todo/pages/onboarding/onboarding.dart';
 import 'package:super_todo/styles/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
         Home.route: (BuildContext context) => Home(),
         ChatPage.route: (BuildContext context) => ChatPage(),
         Profile.route: (BuildContext context) => Profile(),
+        ChatProfile.route: (BuildContext context) => ChatProfile(),
       },
     );
   }

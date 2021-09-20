@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:super_todo/components/ChatList.dart';
 import 'package:super_todo/models/chat.dart';
+import 'package:super_todo/models/user.dart';
 import 'package:super_todo/module/utils.dart';
 import 'package:super_todo/pages/chat.dart';
+import 'package:super_todo/pages/chatProfile.dart';
 
 import '../../firebase.dart';
 
@@ -44,9 +47,14 @@ class ListOfChat extends StatelessWidget {
                   Navigator.of(context)
                       .pushNamed(ChatPage.route, arguments: [chat, userDoc]);
                 },
-                leading: CircleAvatar(
-                  // child: Text(initials),
-                  backgroundImage: NetworkImage(userDoc['photo']),
+                leading: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(ChatProfile.route, arguments: UserModel.fromMap(userDoc));
+                  },
+                  child: CircleAvatar(
+                    // child: Text(initials),
+                    backgroundImage: NetworkImage(userDoc['photo']),
+                  ),
                 ),
                 title: Row(
                   children: [
@@ -59,7 +67,7 @@ class ListOfChat extends StatelessWidget {
                 ),
                 subtitle: Text(chat.lastMsg ?? ''),
                 trailing: IconButton(
-                    onPressed: () {}, icon: Icon(CupertinoIcons.bubble_right)),
+                    onPressed: () {}, icon: Icon(CupertinoIcons.bubble_left_bubble_right_fill), color: Colors.red,),
               ),
             );
           }
