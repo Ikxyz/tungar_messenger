@@ -2,6 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:super_todo/components/ChatList.dart';
 import 'package:super_todo/components/ListOfUsers.dart';
+import 'package:super_todo/pages/storyApp.dart';
+import 'package:super_todo/pages/storyview.dart';
+import '../firebase.dart';
+import 'package:super_todo/models/chat.dart';
+import 'package:super_todo/models/message.dart';
+import 'package:super_todo/module/utils.dart';
+import 'package:super_todo/styles/colors.dart';
+import 'package:cupertino_icons/cupertino_icons.dart';
 import 'package:super_todo/widget/home/compose_chat.dart';
 import 'package:super_todo/widget/home/header.dart';
 
@@ -88,24 +96,36 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: [GestureDetector
+        (
+          onTap: (){
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>StoryApp ()), (route) => false);
+          },
+          child: Icon(Icons.emoji_emotions))],
+      ),
+      drawer: Drawer(
+        child:  SafeArea(
+          child: Column(
+            children: [
+              InkWell(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(Profile.route);
+                      },
+                      child: HomeHeader()),
+            ],
+          ),
+        ),
+
+      ),
       body: Container(
         child: SafeArea(
             child: Column(
           children: [
-            SizedBox(
-              height: 20,
-            ),
+          
 
             /// Header Widget
-            InkWell(
-                onTap: () {
-                  Navigator.of(context).pushNamed(Profile.route);
-                },
-                child: HomeHeader()),
-
-            SizedBox(
-              height: 50,
-            ),
+           
 
             /// LIST OF USERS
             ListOfUsers(
